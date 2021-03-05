@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -ex
+
+sudo apt install git
+
+wget -O - https://richardsnider.github.io/vscode | bash
+
+wget -O - https://richardsnider.github.io/docker | bash
+
+wget -0 - https://richardsnider.github.io/git-ssh | bash
+
+wget -O - https://richardsnider.github.io/nodejs | bash
+
+wget -O - https://richardsnider.github.io/aws-cli | bash
