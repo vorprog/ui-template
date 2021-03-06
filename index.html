@@ -1,29 +1,15 @@
-<!doctype html>
-<html lang="en-GB">
-
-<body>
-
-  <code>wget -qO - richardsnider.github.io/hello-world | bash</code>
-
-  <ul class="list  list--repos">
-    <li class="item  item--repo">
-      <a href="#">repo-name</a>
-    </li>
-  </ul>
-
-  <ul class="portfolio">
-    {% for repo in site.github.public_repositories limit:28 %}
-
-    {% if repo.fork != true %}
-    <li class="repo">
-
-      <a href="{{ repo.homepage }}">{{ repo.name }}</a>
-
-    </li>
-    {% endif %}
-
-    {% endfor %}
-  </ul>
-</body>
-
-</html>
+<code>wget -qO - richardsnider.github.io/hello-world | bash</code>
+<ul>
+<li><a href="/aws-cli.sh" target="_blank"></a></li>
+<li><a href="/docker" target="_blank"></a></li>
+<li><a href="/generate-routing.sh" target="_blank"></a></li>
+<li><a href="/git-ssh" target="_blank"></a></li>
+<li><a href="/hello-world" target="_blank"></a></li>
+<li><a href="/index.html" target="_blank"></a></li>
+<li><a href="/nodejs" target="_blank"></a></li>
+<li><a href="/setup" target="_blank"></a></li>
+<li><a href="/test" target="_blank"></a></li>
+<li><a href="/test/index.html" target="_blank">index.html</a></li>
+<li><a href="/test.html" target="_blank">index.html</a></li>
+<li><a href="/vscode" target="_blank">index.html</a></li>
+</ul>
