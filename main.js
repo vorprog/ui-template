@@ -1,12 +1,10 @@
 const sendRequest = async () => {
-  const response = await fetch({
-    method: `GET`,
-    url: `https://api.coindesk.com/v1/bpi/currentprice.json`
-  })
-  
-  console.log(response);
+  const response = await fetch(`https://api.coindesk.com/v1/bpi/currentprice.json`);
+  const responseText = await response.text();
+
+  console.log(responseText);
   const element = document.createElement(`div`);
-  element.textContent = response;
+  element.textContent = responseText
   document.body.appendChild(element);
 }
 
