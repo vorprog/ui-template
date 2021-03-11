@@ -1,15 +1,15 @@
-function requestListener() {
-  console.log(this.responseText);
+const sendRequest = async () => {
+  const response = await fetch({
+    method: `GET`,
+    url: `https://api.coindesk.com/v1/bpi/currentprice.json`
+  })
+  
+  console.log(response);
   const element = document.createElement(`div`);
-  element.textContent = this.responseText;
+  element.textContent = response;
   document.body.appendChild(element);
 }
 
-function sendRequest() {
-  var oReq = new XMLHttpRequest();
-  oReq.addEventListener("load", requestListener);
-  oReq.open("GET", "https://api.coindesk.com/v1/bpi/currentprice.json");
-  oReq.send();
-}
-
-document.addEventListener(`DOMContentLoaded`, sendRequest);
+(async () => {
+  document.addEventListener(`DOMContentLoaded`, sendRequest);
+})();
