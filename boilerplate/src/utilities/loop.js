@@ -4,39 +4,37 @@ module.exports = (collection, operation) => {
   const objectResult = iterate(collection, operation);
   const resultKeys = Object.keys(objectResult);
 
-  if (isListOfArrayKeys(resultKeys))
+  if (hasAnyNonNumericValue(resultKeys) || (hasNoZeroValue(resultKeys) && !Array.isArray(collection)))
     return objectResult;
 
   const arrayResult = Object.values(objectResult);
-
-  if (typeof collection === `string` && isStringArray(arrayResult))
-    return getString(arrayResult);
+  if (typeof collection === `string` && hasAllStringValues(arrayResult))
+    return getStringFromArray(arrayResult);
 
   return arrayResult;
 }
 
 const iterate = (collection, operation) => {
-  const iterableCollection = new Map(Object.entries(collection));
+  const isCollectionAnArray = Array.isArray(collection);
   let completedIterations = 0;
   const objectResult = {};
 
-  for (const [key, value] of iterableCollection) {
-    const iterationResult = operation(key, value, completedIterations);
+  for (const [key, value] of Object.entries(collection)) {
+    const formattedKey = isCollectionAnArray ? parseInt(key) : key;
+    const iterationResult = operation(formattedKey, value, completedIterations);
     completedIterations++;
 
     if (iterationResult == null) continue;
-    if (iterationResult instanceof kvp) {
+
+    if (iterationResult instanceof kvp)
       objectResult[iterationResult.key] = iterationResult.value;
-    } else {
-      objectResult[key] = iterationResult;
-    }
+    else objectResult[key] = iterationResult;
   }
 
   return objectResult;
 };
 
-const isListOfArrayKeys = (keys) => !keys.some(isNaN) || keys.indexOf(`0`);
-
-const isStringArray = (array) => array.some(value => typeof value === `string`);
-
-const getString = (array) => array.join(``);
+const hasAnyNonNumericValue = keyArray => keyArray.some(isNaN)
+const hasNoZeroValue = keyArray => keyArray.indexOf(`0`) === -1;
+const hasAllStringValues = array => array.every(value => typeof value === `string`);
+const getStringFromArray = array => array.join(``);
