@@ -1,6 +1,6 @@
 const kvp = require('./keyValuePair');
 
-module.exports = (collection, operation) => {
+module.exports = (collection, operation = (key, value) => new kvp(key, value)) => {
   const objectResult = iterate(collection, operation);
   const resultKeys = Object.keys(objectResult);
 
