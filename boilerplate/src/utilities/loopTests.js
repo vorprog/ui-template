@@ -2,7 +2,7 @@ const loop = require('./loop');
 const kvp = require('./keyValuePair');
 
 const evenNumbers = [2, 4, 6, 8, 10];
-const words = ["foo", "bar", "blee", "bla", "meh"];
+const words = [`foo`, `bar`, `blee`, `bla`, `meh`];
 
 const car1 = {
   make: `Tesla`,
@@ -20,20 +20,39 @@ const car2 = {
   isElectric: false
 };
 
-const evenNumbersDoubled = loop(evenNumbers, (key, value) => value*2);
-console.log(`even numbers doubled  >>> ${JSON.stringify(evenNumbersDoubled)}`);
+const assertJsonEquivalence = (a, b) => {
+  if (JSON.stringify(a) !== JSON.stringify(b)) throw new Error();
+};
 
-const sortedArray = loop(evenNumbers, (key, value) => new kvp(evenNumbers.length - (key+1), value));
-console.log(`reverse sorted array  >>> ${JSON.stringify(sortedArray)}`);
+console.log(`evenNumbers >>> ${JSON.stringify(evenNumbers)}`);
+console.log(`car >>> ${JSON.stringify(car1)}`);
 
-const filteredArray = loop(evenNumbers, (key, value) => (value > 6 ? value : null));
-console.log(`filtered array  >>> ${JSON.stringify(filteredArray)}`);
+const evenNumbersDoubled = loop(evenNumbers, (key, value) => value * 2);
+console.log(`evenNumbersDoubled  >>> ${JSON.stringify(evenNumbersDoubled)}`);
+assertJsonEquivalence(evenNumbersDoubled, [4, 8, 12, 16, 20]);
 
-const randomWordValues = loop(car1, (key, value, completedIterations) => words[completedIterations]);
-console.log(`random word values >>> ${JSON.stringify(randomWordValues)}`);
+const descendingEvenNumbers = loop(evenNumbers, (key, value) => new kvp(evenNumbers.length - (key + 1), value));
+console.log(`descendingEvenNumbers  >>> ${JSON.stringify(descendingEvenNumbers)}`);
+assertJsonEquivalence(descendingEvenNumbers, [10, 8, 6, 4, 2]);
 
-const changeValues = loop(car1, key => car2[key]);
-console.log(`changed values >>> ${JSON.stringify(changeValues)}`);
+const filteredNumbers = loop(evenNumbers, (key, value) => (value > 6 ? value : null));
+console.log(`filteredNumbers >>> ${JSON.stringify(filteredNumbers)}`);
+assertJsonEquivalence(filteredNumbers, [8, 10]);
 
-const remapValues = loop(car1, (key, value, completedIterations) => new kvp(words[completedIterations], value));
-console.log(`re-mapped values >>> ${JSON.stringify(remapValues)}`);
+const randomWordValues = loop(car1, (key, value, completedIterations) => new kvp(key, words[completedIterations]));
+console.log(`randomWordValues >>> ${JSON.stringify(randomWordValues)}`);
+assertJsonEquivalence(randomWordValues, { make: `foo`, model: `bar`, year: `blee`, stock: `bla`, isElectric: `meh` });
+
+const changedCarValues = loop(car1, key => car2[key]);
+console.log(`changedCarValues >>> ${JSON.stringify(changedCarValues)}`);
+assertJsonEquivalence(changedCarValues, [`Ford`, `Mustang`, `1966`, 7, false]);
+
+const reKeyedCarObject = loop(car1, (key, value, completedIterations) => new kvp(words[completedIterations], value));
+console.log(`reKeyedCarObject >>> ${JSON.stringify(reKeyedCarObject)}`);
+assertJsonEquivalence(reKeyedCarObject, { foo: `Tesla`, bar: `Cyber Truck`, blee: `2021`, bla: 100, meh: true });
+
+const carValuesArray = loop(car1, (key, value) => value);
+console.log(`carValuesArray >>> ${JSON.stringify(carValuesArray)}`);
+assertJsonEquivalence(carValuesArray, [`Tesla`, `Cyber Truck`, `2021`, 100, true]);
+
+console.log(`All tests have passed!`);
