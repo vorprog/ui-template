@@ -22,13 +22,14 @@ const iterate = (collection, operation) => {
   for (const [key, value] of Object.entries(collection)) {
     const formattedKey = isCollectionAnArray ? parseInt(key) : key;
     const iterationResult = operation(formattedKey, value, completedIterations);
-    completedIterations++;
 
     if (iterationResult == null) continue;
 
     if (iterationResult instanceof kvp)
       objectResult[iterationResult.key] = iterationResult.value;
-    else objectResult[key] = iterationResult;
+    else objectResult[completedIterations] = iterationResult;
+
+    completedIterations++;
   }
 
   return objectResult;
