@@ -1,3 +1,5 @@
+const loop = require('../utilities/loop');
+
 const pangramList = [
   `The quick, brown fox jumps over a lazy dog.`,
   `DJs flock by when MTV ax quiz prog.`,
@@ -27,7 +29,7 @@ const pangramList = [
   `Watch "Jeopardy!", Alex Trebek's fun TV quiz game.`,
   `Woven silk pyjamas exchanged for blue quartz.`,
   `Brawny gods just flocked up to quiz and vex him.`,
-  `Adjusting quiver and bow, Zompyc[1] killed the fox.`,
+  `Adjusting quiver and bow, Zompyc killed the fox.`,
   `My faxed joke won a pager in the cable TV quiz show.`,
   `Amazingly few discotheques provide jukeboxes.`,
   `My girl wove six dozen plaid jackets before she quit.`,
@@ -49,6 +51,7 @@ module.exports = () => {
     randomPangram: pangramList[Math.floor(Math.random() * pangramList.length)],
     randomWord: randomWords[Math.floor(Math.random() * randomWords.length)],
     randomInteger: Math.floor(Math.random() * 500),
-    randomGuid: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.replace('x', (Math.random() * 16 | 0).toString(16)),
-  };
+    randomGuid: loop('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', (key, value) =>
+      value === "x" ? (Math.random() * 16 | 0).toString(16) : "-")
+  }
 }
