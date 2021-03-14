@@ -55,4 +55,8 @@ const carValuesArray = loop(car1, (key, value) => value);
 console.log(`carValuesArray >>> ${JSON.stringify(carValuesArray)}`);
 assertJsonEquivalence(carValuesArray, [`Tesla`, `Cyber Truck`, `2021`, 100, true]);
 
+const countBy10 = loop(10, key => key*10);
+console.log(`countBy10 >>> ${JSON.stringify(countBy10)}`);
+assertJsonEquivalence(countBy10, [0, 10, 20, 30, 40, 50, 60, 70, 80, 90])
+
 console.log(`All tests have passed!`);
