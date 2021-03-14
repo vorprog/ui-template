@@ -4,6 +4,10 @@ const defaultOperation = (key, value) => new kvp(key, value);
 
 module.exports = (collection, operation = defaultOperation) => {
   const isCollectionAnArray = Array.isArray(collection);
+  const isCollectionAnInteger = isFinite(collection);
+
+  if(isCollectionAnInteger) collection = new Array(collection).fill(true);
+
   let completedIterations = 0;
   const objectResult = {};
 
