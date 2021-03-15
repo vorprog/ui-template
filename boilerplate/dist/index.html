@@ -25,7 +25,18 @@
       justify-content: space-between;
       align-items: center;
       align-content: flex-start;
-      text-align: center;
+      text-align: left;
+    }
+
+    .input {
+      min-width: 25%;
+      flex: 1;
+      white-space: nowrap;
+    }
+
+    table {
+      display: block;
+      white-space: nowrap;
     }
 
     .popup {
@@ -156,8 +167,7 @@
 
   <div id="main-row" class="row">
     <div id="action-bar" class="grey-444 row" style="justify-content: space-evenly;">
-      <div id="input-filter" class="grey-222 padded curved" style="flex:2;min-width:100px;text-overflow:clip;"
-        contenteditable="true" placeholder="filter . . ."></div>
+      <div id="input-filter" class="grey-222 padded curved input" contenteditable="true" placeholder="filter . . ."></div>
       <div id="action-buttons">
         <svg id="refresh-results" class="padded curved grey-border" width="24" height="24" viewBox="0 0 24 24">
           <path
