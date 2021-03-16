@@ -1,4 +1,4 @@
-const map = require('lodash.map');
+const loop = require('../utilities/loop');
 
 /**
  * @typedef {Object} elementConfig
@@ -16,15 +16,15 @@ const map = require('lodash.map');
 const newElement = (parent, params = {}) => {
   const element = document.createElementNS(params.xmlns || `http://www.w3.org/1999/xhtml`, params.tag || `div`);
   element.textContent = params.textContent || null;
-  map(params.children, child => newElement(element, child));
+  loop(params.children, (key, child) => newElement(element, child));
 
   delete params.xmlns;
   delete params.tag;
   delete params.textContent;
   delete params.children;
 
-  map(params, (value, key) => element.setAttribute(key, value || ``));
-  return parent.appendChild(element)
+  loop(params, (key, value) => element.setAttribute(key, value || ``));
+  return parent.appendChild(element);
 };
 
 module.exports = newElement;
