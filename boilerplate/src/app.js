@@ -2,6 +2,7 @@ const loop = require('./utilities/loop');
 const randomData = require('./data/randomData');
 const newElement = require('./utilities/newElement');
 const columnHeader = require('./components/getColumnHeaderConfig');
+const svgContent = require('./components/getSvgContentConfig');
 
 const startup = () => {
   console.log(`Document intialized.`);
@@ -9,6 +10,10 @@ const startup = () => {
   const urlParams = new URLSearchParams(window.location.search);
   loop(Object.fromEntries(urlParams), (key, value) => console.log(`Key: ${key}, Value: ${value}`));
 
+  document.body.classList.add(`grey-111`);
+  const svgContentElement = newElement(document.body, svgContent);
+
+  // TODO: show number of resuls and number selected
   document.getElementById(`input-filter`).focus();
   const dataTable = document.getElementById(`data-table`);
   newElement(dataTable, {
