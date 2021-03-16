@@ -2,6 +2,7 @@ const loopToObject = require('./loopToObject');
 
 module.exports = (collection, operation) => {
   const objectResult = loopToObject(collection, operation);
+  if(objectResult == null) return;
   const resultKeys = Object.keys(objectResult);
 
   if (hasAllNumericValues(resultKeys)) {

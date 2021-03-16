@@ -3,6 +3,9 @@ const kvp = require('./keyValuePair');
 const defaultOperation = (key, value) => new kvp(key, value);
 
 module.exports = (collection, operation = defaultOperation) => {
+  const isCollectionEmpty = !collection || (isNaN(collection) && Object.keys(collection).length == 0);
+  if(isCollectionEmpty) return;
+
   const isCollectionAnArray = Array.isArray(collection);
   const isCollectionAnInteger = isFinite(collection);
 
