@@ -4,6 +4,7 @@ module.exports = (symbolName, size = 12) => ({
   id: `${symbolName}-svg`,
   width: `${size}`,
   height: `${size}`,
+  class: `padded`,
   viewBox: `0 0 24 24`,
   children: [{
     xmlns: `http://www.w3.org/2000/svg`,

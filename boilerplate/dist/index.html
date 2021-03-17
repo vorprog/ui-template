@@ -28,6 +28,10 @@
       text-align: left;
     }
 
+    .evenlySpaced {
+      justify-content: space-evenly;
+    }
+
     .input {
       min-width: 25%;
       flex: 1;
@@ -107,58 +111,6 @@
 </head>
 
 <body>
-  <div class="grey-666 row" id="header">
-    <div id="left-header">
-      <svg id="menu" class="padded" width="40" height="40" viewBox="0 0 24 24">
-        <use href="#menu-symbol"></use>
-      </svg>
-      <svg id="search" class="padded" width="40" height="40" viewBox="0 0 24 24">
-        <use href="#search-symbol"></use>
-      </svg>
-    </div>
-
-    <div id="right-header">
-      <svg id="notifications" class="padded" width="40" height="40" viewBox="0 0 24 24">
-        <use href="#notifications-symbol"></use>
-      </svg>
-      <svg id="settings" class="padded" width="40" height="40" viewBox="0 0 24 24">
-        <use href="#settings-symbol"></use>
-      </svg>
-      <div class="grey popup" id="settings" style="display: none;">
-        <div id="settings-link-1">&lt;insert link here&gt;</div>
-        <svg id="down-arrow" width="24" height="24" viewBox="0 0 24 24">
-          <use href="#down-arrow-symbol"></use>
-        </svg>
-      </div>
-    </div>
-  </div>
-
-  <div id="main-row" class="row">
-    <div id="action-bar" class="grey-444 row" style="justify-content: space-evenly;">
-      <div id="input-filter" class="grey-222 padded curved input" contenteditable="true" placeholder="filter . . ."></div>
-      <div id="action-buttons">
-        <svg id="refresh-results" class="padded curved grey-border" width="24" height="24" viewBox="0 0 24 24">
-          <use href="#refresh-symbol"></use>
-        </svg>
-        <svg id="add-item" class="padded curved grey-border" width="24" height="24" viewBox="0 0 24 24">
-          <use href="#add-symbol"></use>
-        </svg>
-        <svg id="remove-item" class="padded curved grey-border" width="24" height="24" viewBox="0 0 24 24">
-          <use href="#remove-symbol"></use>
-        </svg>
-
-        <svg id="more-options" class="padded curved grey-border" width="24" height="24" viewBox="0 0 24 24">
-          <use xlink:href="#sort-down-symbol"></use>
-        </svg>
-      </div>
-    </div>
-    <table id="data-table" class="grey-222 row">
-    </table>
-  </div>
-  </div>
-  <div id="footer" class="grey row">
-    <div>FOOTER</div>
-  </div>
 </body>
 
 </html>
