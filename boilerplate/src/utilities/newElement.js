@@ -1,16 +1,16 @@
 const loop = require('../utilities/loop');
 
 /**
- * @typedef {Object} elementConfig
+ * @typedef {Object} ElementConfig
  * @property {string} tag - HTML element tag
  * @property {string} xmlns - XML namespace (defaults to http://www.w3.org/1999/xhtml)
  * @property {string} textContent
- * @property {elementConfig[]} children
+ * @property {ElementConfig[]} children
  */
 
 /**
  * @param {HTMLElement} parent
- * @param {elementConfig} params
+ * @param {ElementConfig} params
  * @returns {HTMLElement | SVGElement}
 */
 const newElement = (parent, params = {}) => {
