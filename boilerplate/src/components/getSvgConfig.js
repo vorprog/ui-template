@@ -1,3 +1,8 @@
+/** 
+ * @param {string} symbolName
+ * @param {Number} size
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
 module.exports = (symbolName, size = 12) => ({
   xmlns: `http://www.w3.org/2000/svg`,
   tag: `svg`,

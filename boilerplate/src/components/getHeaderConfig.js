@@ -1,6 +1,7 @@
 const svg = require('./getSvgConfig');
 
-module.exports = {
+/** @returns {import('../utilities/newElement').ElementConfig} */
+const getBaseHeaderConfig = () => ({
   id: `header`,
   class: `grey-666 row`,
   children: [{
@@ -17,4 +18,10 @@ module.exports = {
       svg(`settings-symbol`, 40)
     ]
   }]
-};
+});
+
+/**
+ * @param {import('../utilities/newElement').ElementConfig} params
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+module.exports = (params) => Object.assign(getBaseHeaderConfig(), params);

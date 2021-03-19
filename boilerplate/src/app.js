@@ -14,8 +14,8 @@ const startup = () => {
 
   document.body.classList.add(`grey-111`);
 
-  const svgContentElement = newElement(document.body, svgContent);
-  const headerElement = newElement(document.body, header);
+  const svgContentElement = newElement(document.body, svgContent());
+  const headerElement = newElement(document.body, header());
   const mainRowElement = newElement(document.body, mainRow());
   const footerElement = newElement(document.body, footer());
 

@@ -1,3 +1,4 @@
+/** @returns {import('../utilities/newElement').ElementConfig} */
 const getSymbolConfig = (symbolId, pathDataString) => ({
   xmlns: `http://www.w3.org/2000/svg`,
   tag: `symbol`,
@@ -9,7 +10,11 @@ const getSymbolConfig = (symbolId, pathDataString) => ({
   }]
 });
 
-module.exports = {
+/**
+ * @param {import('../utilities/newElement').ElementConfig} params
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+module.exports = () => ({
   xmlns: `http://www.w3.org/2000/svg`,
   tag: `svg`,
   id: `svg-content`,
@@ -28,4 +33,4 @@ module.exports = {
     getSymbolConfig(`add-symbol`, `M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10`),
     getSymbolConfig(`remove-symbol`, `M0 10h24v4h-24z`)
   ]
-};
+});

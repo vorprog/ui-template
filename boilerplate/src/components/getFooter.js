@@ -10,5 +10,5 @@ const getBaseFooterConfig = () => ({
 /**
  * @param {import('../utilities/newElement').ElementConfig} params
  * @returns {import('../utilities/newElement').ElementConfig}
-*/
+ */
 module.exports = (params = {}) => Object.assign(getBaseFooterConfig(), params);
