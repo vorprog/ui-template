@@ -6,7 +6,7 @@ const mainRow = require('./components/getMainRowConfig');
 const footer = require('./components/getFooter');
 const fillDataTable = require('./actions/fillDataTable');
 
-const startup = () => {
+const startup = async () => {
   console.log(`Document intialized.`);
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -21,7 +21,7 @@ const startup = () => {
 
   document.getElementById(`filter-input`).focus();
 
-  fillDataTable();
+  await fillDataTable();
 };
 
 (async () => {
