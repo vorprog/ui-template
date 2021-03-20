@@ -18,8 +18,8 @@ module.exports = async (path = ``) => {
     children: [
       columnHeader(`name`),
       columnHeader(`type`),
-      columnHeader(`download_url`),
-      columnHeader(`column4`)
+      columnHeader(`raw file`),
+      columnHeader(`download link`)
     ]
   });
 
@@ -32,8 +32,22 @@ module.exports = async (path = ``) => {
     children: [
       { tag: `td`, class: `grey-border`, textContent: value.name },
       { tag: `td`, class: `grey-border`, textContent: value.type },
-      { tag: `td`, class: `grey-border`, textContent: value.download_url },
-      { tag: `td`, class: `grey-border`, textContent: `${userName}.github.io/${value.path}` }
+      {
+        tag: `td`, class: `grey-border`, children: [{
+          tag: `a`,
+          href: value.download_url,
+          target: `_blank`,
+          textContent: value.download_url
+        }]
+      },
+      {
+        tag: `td`, class: `grey-border`, children: [{
+          tag: `a`,
+          href: `https://${userName}.github.io/${value.path}`,
+          target: `_blank`,
+          textContent: `${userName}.github.io/${value.path}`
+        }]
+      }
     ]
   }));
 };
