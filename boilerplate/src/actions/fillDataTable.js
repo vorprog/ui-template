@@ -1,5 +1,5 @@
 const columnHeader = require('../components/getColumnHeaderConfig');
-const util = require('../utilities');
+const util = require('../utilities/all');
 
 const userName = `richardsnider`
 const rootFolderUrl = `https://api.github.com/repos/${userName}/${userName}.github.io/contents`;
