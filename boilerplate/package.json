@@ -3,14 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --config=webpack.config.js",
-    "prod": "webpack --mode=production --config=webpack.config.js"
+    "start": "webpack"
   },
   "dependencies": {
-    "lodash.map": "^4.6.0",
-    "webpack": "^4.17.1"
+    "webpack": "^5.27.1"
   },
   "devDependencies": {
-    "webpack-cli": "^3.1.0"
+    "webpack-cli": "^4.5.0"
   }
 }
