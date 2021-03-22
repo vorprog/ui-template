@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --mode=development --devtool=source-map"
+    "start": "node server.js",
+    "build": "webpack --mode=development --devtool=source-map"
   },
   "dependencies": {
     "webpack": "^5.27.1"
