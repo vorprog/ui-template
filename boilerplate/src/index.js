@@ -1,3 +1,8 @@
+window.app = {
+  actions: {},
+  state: {}
+};
+
 const loop = require('./utilities/loop');
 const newElement = require('./utilities/newElement');
 const header = require('./components/getHeaderConfig');

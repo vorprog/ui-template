@@ -4,6 +4,7 @@ const rootFolderUrl = `https://api.github.com/repos/${window.env.GITHUB_USERNAME
 /**
  * @typedef {Object} GithubResponse
  * @property {('dir'|'file'|'symlink')} type
+ * @property {string} path
  * @property {string} download_url
  * @property {sting} html_url
  */
