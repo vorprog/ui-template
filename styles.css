@@ -1,0 +1,99 @@
+body, body * {
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+  font-family: 'Courier New';
+  line-height: 20px;
+  color: #BBB;
+  overflow: auto;
+  outline: none;
+}
+
+div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: flex-start;
+  text-align: left;
+}
+
+.evenlySpaced {
+  justify-content: space-evenly;
+}
+
+.input {
+  min-width: 25%;
+  flex: 1;
+  white-space: nowrap;
+}
+
+table {
+  display: block;
+  white-space: nowrap;
+}
+
+.popup {
+  display: block;
+  position: absolute;
+  z-index: 1;
+}
+
+.padded {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.row {
+  width: 100%;
+}
+
+.resizable {
+  resize: horizontal;
+}
+
+*::-webkit-resizer {
+  background-color: transparent;
+}
+
+.curved {
+  border-radius: 5px;
+}
+
+.grey-111 {
+  background-color: #111;
+}
+
+.grey-222 {
+  background-color: #222;
+}
+
+.grey-333 {
+  background-color: #333;
+}
+
+.grey-444 {
+  background-color: #444;
+}
+
+.grey-666 {
+  background-color: #666;
+}
+
+.grey-border {
+  border: 1px solid #333
+}
+
+table {
+  border-collapse: collapse;
+}
+
+[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+}
