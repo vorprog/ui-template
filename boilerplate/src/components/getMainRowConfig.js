@@ -18,7 +18,7 @@ const getBaseMainRowConfig = () => ({
   class: `row`,
   children: [{
     id: `action-bar`,
-    class: `evenlySpaced grey-444 row`,
+    class: `grey-444 row`,
     children: [input({ id: `filter-input` }), getActionButtonsConfig()]
   }, {
     tag: `table`,

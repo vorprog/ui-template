@@ -21,6 +21,11 @@ const startup = async () => {
 
   const svgContentElement = newElement(document.body, svgContent());
   const headerElement = newElement(document.body, header());
+  const menuElement = newElement(document.body, {
+    id: `menu`,
+    class: `grey-111 hidden popup`,
+    textContent: `test`,
+  })
   const mainRowElement = newElement(document.body, mainRow());
   const footerElement = newElement(document.body, footer());
 
