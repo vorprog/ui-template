@@ -1,9 +1,10 @@
 const svg = require('./getSvgConfig');
+const toggleHiddenClass = require('../actions/toggleHiddenClass');
 
-window.app.actions.toggleMenu = () => {
-  const menuElement = document.getElementById(`menu`);
-  menuElement.classList.contains(`hidden`) ? menuElement.classList.remove(`hidden`) : menuElement.classList.add(`hidden`);
-};
+window.app.actions.toggleMenu = () => toggleHiddenClass(`menu`);
+window.app.actions.toggleSearch = () => toggleHiddenClass(`search`);
+window.app.actions.toggleNotifications = () => toggleHiddenClass(`notifications`);
+window.app.actions.toggleSettings = () => toggleHiddenClass(`settings`);
 
 /** @returns {import('../utilities/newElement').ElementConfig} */
 const getBaseHeaderConfig = () => ({
@@ -17,7 +18,7 @@ const getBaseHeaderConfig = () => ({
         children: [svg(`menu-symbol`, 40)]
       },
       {
-        onclick: `window.app.actions.displaySearch()`,
+        onclick: `window.app.actions.toggleSearch()`,
         children: [svg(`search-symbol`, 40)]
       }
     ]
@@ -26,11 +27,11 @@ const getBaseHeaderConfig = () => ({
     id: `right-header`,
     children: [
       {
-        onclick: `window.app.actions.displayNotifications()`,
+        onclick: `window.app.actions.toggleNotifications()`,
         children: [svg(`notifications-symbol`, 40)]
       },
       {
-        onclick: `window.app.actions.displaySettings()`,
+        onclick: `window.app.actions.toggleSettings()`,
         children: [svg(`settings-symbol`, 40)]
       }
     ]

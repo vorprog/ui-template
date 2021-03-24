@@ -36,6 +36,10 @@ table {
   z-index: 1;
 }
 
+.right-side {
+  right: 0;
+}
+
 .hidden {
   display: none;
 }

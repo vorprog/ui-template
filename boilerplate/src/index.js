@@ -5,8 +5,11 @@ window.app = {
 
 const loop = require('./utilities/loop');
 const newElement = require('./utilities/newElement');
-const header = require('./components/getHeaderConfig');
 const svgContent = require('./components/getSvgContentConfig');
+const menu = require('./components/getMenuConfig');
+const notifications = require('./components/getNotificationsConfig');
+const settings = require('./components/getSettingsConfig');
+const header = require('./components/getHeaderConfig');
 const mainRow = require('./components/getMainRowConfig');
 const footer = require('./components/getFooter');
 const fillDataTable = require('./actions/fillDataTable');
@@ -21,11 +24,10 @@ const startup = async () => {
 
   const svgContentElement = newElement(document.body, svgContent());
   const headerElement = newElement(document.body, header());
-  const menuElement = newElement(document.body, {
-    id: `menu`,
-    class: `grey-111 hidden popup`,
-    textContent: `test`,
-  })
+  const menuElement = newElement(document.body, menu());
+  const notificationsElement = newElement(document.body, notifications());
+  const settingsElement = newElement(document.body, settings());
+
   const mainRowElement = newElement(document.body, mainRow());
   const footerElement = newElement(document.body, footer());
 
