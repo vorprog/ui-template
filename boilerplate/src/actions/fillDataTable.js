@@ -21,6 +21,34 @@ const fillDataTable = async (path = ``) => {
     ]
   });
 
+  const parentPath = path.substr(0, path.lastIndexOf(`/`) || path.length-1);
+
+  util.newElement(dataTable, {
+    tag: `tr`,
+    children: [
+      {
+        tag: `td`,
+        class: `grey-border`,
+        onclick: () => (fillDataTable(parentPath)),
+        children: [{
+          textContent: `../`
+        }]
+      },
+      {
+        tag: `td`,
+        class: `grey-border`,
+        textContent: `dir`
+      },
+      {
+        tag: `td`,
+        class: `grey-border`,
+        children: [{
+          textContent: `N/A`
+        }]
+      }
+    ]
+  });
+
   const contentsReponse = await requestContentsTask;
   if (contentsReponse.status !== 200) throw new Error(`Github returned status code ${contentsReponse.status} ${await contentsReponse.text()}`);
 
