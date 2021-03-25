@@ -1,15 +1,12 @@
-window.app = {
-  actions: {},
-  state: {}
-};
-
 const loop = require('./utilities/loop');
 const newElement = require('./utilities/newElement');
+const messages = require('./data/messages');
 const svgContent = require('./components/getSvgContentConfig');
+const banner = require('./components/getBannerConfig');
+const header = require('./components/getHeaderConfig');
 const menu = require('./components/getMenuConfig');
 const notifications = require('./components/getNotificationsConfig');
 const settings = require('./components/getSettingsConfig');
-const header = require('./components/getHeaderConfig');
 const mainRow = require('./components/getMainRowConfig');
 const footer = require('./components/getFooter');
 const fillDataTable = require('./actions/fillDataTable');
@@ -23,6 +20,7 @@ const startup = async () => {
   document.body.classList.add(`grey-111`);
 
   const svgContentElement = newElement(document.body, svgContent());
+  const bannerElement = newElement(document.body, banner(messages.bannerMessage));
   const headerElement = newElement(document.body, header());
   const menuElement = newElement(document.body, menu());
   const notificationsElement = newElement(document.body, notifications());

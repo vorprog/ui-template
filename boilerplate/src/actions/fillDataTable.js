@@ -4,7 +4,7 @@ const makeGithubContentsRequest = require('./makeGithubContentsRequest');
 
 const githubPagesDomain = `${window.env.GITHUB_USERNAME}.github.io`;
 
-window.app.actions.fillDataTable = async (path = ``) => {
+const fillDataTable = async (path = ``) => {
   const requestContentsTask = makeGithubContentsRequest(path);
 
   // TODO: show number of results and number selected
@@ -22,7 +22,7 @@ window.app.actions.fillDataTable = async (path = ``) => {
   });
 
   const contentsReponse = await requestContentsTask;
-  if(contentsReponse.status !== 200) throw new Error(`Github returned status code ${contentsReponse.status} ${await contentsReponse.text()}`);
+  if (contentsReponse.status !== 200) throw new Error(`Github returned status code ${contentsReponse.status} ${await contentsReponse.text()}`);
 
   /** @type {Array<import('./makeGithubContentsRequest').GithubResponse>} */
   const contents = await contentsReponse.json();
@@ -42,7 +42,7 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
       {
         tag: `td`,
         class: `grey-border`,
-        onclick: value.type === `dir` ? `window.app.actions.fillDataTable('${value.path}')` : undefined,
+        onclick: value.type === `dir` ? () => (fillDataTable(value.path)) : undefined,
         children: [{
           tag: `a`,
           href: value.type === `dir` ? value.html_url : value.download_url,
@@ -68,5 +68,4 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
     ]
   }));
 
-  module.exports = window.app.actions.fillDataTable;
-  
+module.exports = fillDataTable;

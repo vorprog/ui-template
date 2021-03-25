@@ -12,7 +12,7 @@ body, body * {
 div {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   align-content: flex-start;
   text-align: left;
@@ -89,6 +89,10 @@ table {
 
 .grey-666 {
   background-color: #666;
+}
+
+.blue-247 {
+  background-color: #247;
 }
 
 .grey-border {
