@@ -13,7 +13,7 @@ const makeGithubContentsRequest = __webpack_require__(/*! ./makeGithubContentsRe
 
 const githubPagesDomain = `${window.env.GITHUB_USERNAME}.github.io`;
 
-window.app.actions.fillDataTable = async (path = ``) => {
+const fillDataTable = async (path = ``) => {
   const requestContentsTask = makeGithubContentsRequest(path);
 
   // TODO: show number of results and number selected
@@ -30,8 +30,36 @@ window.app.actions.fillDataTable = async (path = ``) => {
     ]
   });
 
+  const parentPath = path.substr(0, path.lastIndexOf(`/`) || path.length-1);
+
+  util.newElement(dataTable, {
+    tag: `tr`,
+    children: [
+      {
+        tag: `td`,
+        class: `grey-border`,
+        onclick: () => (fillDataTable(parentPath)),
+        children: [{
+          textContent: `../`
+        }]
+      },
+      {
+        tag: `td`,
+        class: `grey-border`,
+        textContent: `dir`
+      },
+      {
+        tag: `td`,
+        class: `grey-border`,
+        children: [{
+          textContent: `N/A`
+        }]
+      }
+    ]
+  });
+
   const contentsReponse = await requestContentsTask;
-  if(contentsReponse.status !== 200) throw new Error(`Github returned status code ${contentsReponse.status} ${await contentsReponse.text()}`);
+  if (contentsReponse.status !== 200) throw new Error(`Github returned status code ${contentsReponse.status} ${await contentsReponse.text()}`);
 
   /** @type {Array<import('./makeGithubContentsRequest').GithubResponse>} */
   const contents = await contentsReponse.json();
@@ -51,7 +79,7 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
       {
         tag: `td`,
         class: `grey-border`,
-        onclick: value.type === `dir` ? `window.app.actions.fillDataTable('${value.path}')` : undefined,
+        onclick: value.type === `dir` ? () => (fillDataTable(value.path)) : undefined,
         children: [{
           tag: `a`,
           href: value.type === `dir` ? value.html_url : value.download_url,
@@ -77,7 +105,7 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
     ]
   }));
 
-  module.exports = window.app.actions.fillDataTable;
+module.exports = fillDataTable;
 
 /***/ }),
 
@@ -104,6 +132,51 @@ const rootFolderUrl = `https://api.github.com/repos/${window.env.GITHUB_USERNAME
  * @returns {Promise<Response>}
  */
 module.exports = async (path = ``) => fetch(`${rootFolderUrl}/${path}`);
+
+
+/***/ }),
+
+/***/ "./src/actions/toggleHiddenElement.js":
+/*!********************************************!*\
+  !*** ./src/actions/toggleHiddenElement.js ***!
+  \********************************************/
+/***/ ((module) => {
+
+module.exports = (elementId) => {
+  const targetElement = document.getElementById(elementId);
+  targetElement.classList.contains(`hidden`) ?
+    targetElement.classList.remove(`hidden`) : targetElement.classList.add(`hidden`);
+};
+
+
+/***/ }),
+
+/***/ "./src/components/getBannerConfig.js":
+/*!*******************************************!*\
+  !*** ./src/components/getBannerConfig.js ***!
+  \*******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenElement */ "./src/actions/toggleHiddenElement.js");
+
+/** 
+ * @param {string} bannerMessage
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+module.exports = (bannerMessage) => ({
+  id: `banner`,
+  class: `blue-247 row`,
+  children: [
+    {},
+    {
+      class: `padded`,
+      textContent: `X`,
+      onclick: () => toggleHiddenElement(`banner`)
+    }, {
+      class: `padded row`,
+      textContent: bannerMessage
+    }]
+});
 
 
 /***/ }),
@@ -189,6 +262,7 @@ module.exports = (params = {}) => Object.assign(getBaseFooterConfig(), params);
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgConfig.js");
+const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenElement */ "./src/actions/toggleHiddenElement.js");
 
 /** @returns {import('../utilities/newElement').ElementConfig} */
 const getBaseHeaderConfig = () => ({
@@ -197,15 +271,28 @@ const getBaseHeaderConfig = () => ({
   children: [{
     id: `left-header`,
     children: [
-      svg(`menu-symbol`, 40),
-      svg(`search-symbol`, 40)
+      {
+        id: `menu-button`,
+        onclick: () => (toggleHiddenElement(`menu`)),
+        children: [svg(`menu-symbol`, 40)]
+      },
+      {
+        onclick: () => (toggleHiddenElement(`search`)),
+        children: [svg(`search-symbol`, 40)]
+      }
     ]
   },
   {
     id: `right-header`,
     children: [
-      svg(`notifications-symbol`, 40),
-      svg(`settings-symbol`, 40)
+      {
+        onclick: () => (toggleHiddenElement(`notifications`)),
+        children: [svg(`notifications-symbol`, 40)]
+      },
+      {
+        onclick: () => (toggleHiddenElement(`settings`)),
+        children: [svg(`settings-symbol`, 40)]
+      }
     ]
   }]
 });
@@ -268,7 +355,7 @@ const getBaseMainRowConfig = () => ({
   class: `row`,
   children: [{
     id: `action-bar`,
-    class: `evenlySpaced grey-444 row`,
+    class: `grey-444 row`,
     children: [input({ id: `filter-input` }), getActionButtonsConfig()]
   }, {
     tag: `table`,
@@ -282,6 +369,105 @@ const getBaseMainRowConfig = () => ({
  * @returns {import('../utilities/newElement').ElementConfig}
  */
 module.exports = (params) => Object.assign(getBaseMainRowConfig(), params);
+
+
+/***/ }),
+
+/***/ "./src/components/getMenuConfig.js":
+/*!*****************************************!*\
+  !*** ./src/components/getMenuConfig.js ***!
+  \*****************************************/
+/***/ ((module) => {
+
+/** @returns {import('../utilities/newElement').ElementConfig} */
+const getBaseMenuConfig = () => ({
+  id: `menu`,
+  class: `grey-333 hidden popup`,
+  children: [{
+    class: `grey-border padded`,
+    textContent: `Section 1`
+  },
+  {
+    class: `grey-border padded`,
+    textContent: `Section 2`
+  },
+  {
+    class: `grey-border padded`,
+    textContent: `Section 3`
+  }]
+});
+
+/**
+ * @param {import('../utilities/newElement').ElementConfig} params
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+module.exports = (params = {}) => Object.assign(getBaseMenuConfig(), params);
+
+
+/***/ }),
+
+/***/ "./src/components/getNotificationsConfig.js":
+/*!**************************************************!*\
+  !*** ./src/components/getNotificationsConfig.js ***!
+  \**************************************************/
+/***/ ((module) => {
+
+/** @returns {import('../utilities/newElement').ElementConfig} */
+const getBaseNotificationsConfig = () => ({
+  id: `notifications`,
+  class: `grey-333 hidden right-side popup`,
+  children: [{
+    class: `grey-border padded`,
+    textContent: `Notification 1`
+  },
+  {
+    class: `grey-border padded`,
+    textContent: `Notification 2`
+  },
+  {
+    class: `grey-border padded`,
+    textContent: `Notification 3`
+  }]
+});
+
+/**
+ * @param {import('../utilities/newElement').ElementConfig} params
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+module.exports = (params = {}) => Object.assign(getBaseNotificationsConfig(), params);
+
+
+/***/ }),
+
+/***/ "./src/components/getSettingsConfig.js":
+/*!*********************************************!*\
+  !*** ./src/components/getSettingsConfig.js ***!
+  \*********************************************/
+/***/ ((module) => {
+
+/** @returns {import('../utilities/newElement').ElementConfig} */
+const getBaseSettingsConfig = () => ({
+  id: `settings`,
+  class: `grey-333 hidden right-side popup`,
+  children: [{
+    class: `grey-border padded`,
+    textContent: `General Settings`
+  },
+  {
+    class: `grey-border padded`,
+    textContent: `Profile`
+  },
+  {
+    class: `grey-border padded`,
+    textContent: `Log out`
+  }]
+});
+
+/**
+ * @param {import('../utilities/newElement').ElementConfig} params
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+module.exports = (params = {}) => Object.assign(getBaseSettingsConfig(), params);
 
 
 /***/ }),
@@ -357,6 +543,19 @@ module.exports = () => ({
     getSymbolConfig(`remove-symbol`, `M0 10h24v4h-24z`)
   ]
 });
+
+
+/***/ }),
+
+/***/ "./src/data/messages.js":
+/*!******************************!*\
+  !*** ./src/data/messages.js ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = {
+  bannerMessage: `Hello! Welcome to my github pages website! This UI uses github's web api to help you view files and directories I keep in this repo.`,
+};
 
 
 /***/ }),
@@ -510,11 +709,13 @@ const newElement = (parent, params = {}) => {
   const element = document.createElementNS(params.xmlns || `http://www.w3.org/1999/xhtml`, params.tag || `div`);
   element.textContent = params.textContent || null;
   loop(params.children, (key, child) => newElement(element, child));
+  if(params.onclick) element.addEventListener("click", params.onclick);
 
   delete params.xmlns;
   delete params.tag;
   delete params.textContent;
   delete params.children;
+  delete params.onclick;
 
   loop(params, (key, value) => element.setAttribute(key, value || ``));
   return parent.appendChild(element);
@@ -558,15 +759,15 @@ var __webpack_exports__ = {};
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-window.app = {
-  actions: {},
-  state: {}
-};
-
 const loop = __webpack_require__(/*! ./utilities/loop */ "./src/utilities/loop.js");
 const newElement = __webpack_require__(/*! ./utilities/newElement */ "./src/utilities/newElement.js");
-const header = __webpack_require__(/*! ./components/getHeaderConfig */ "./src/components/getHeaderConfig.js");
+const messages = __webpack_require__(/*! ./data/messages */ "./src/data/messages.js");
 const svgContent = __webpack_require__(/*! ./components/getSvgContentConfig */ "./src/components/getSvgContentConfig.js");
+const banner = __webpack_require__(/*! ./components/getBannerConfig */ "./src/components/getBannerConfig.js");
+const header = __webpack_require__(/*! ./components/getHeaderConfig */ "./src/components/getHeaderConfig.js");
+const menu = __webpack_require__(/*! ./components/getMenuConfig */ "./src/components/getMenuConfig.js");
+const notifications = __webpack_require__(/*! ./components/getNotificationsConfig */ "./src/components/getNotificationsConfig.js");
+const settings = __webpack_require__(/*! ./components/getSettingsConfig */ "./src/components/getSettingsConfig.js");
 const mainRow = __webpack_require__(/*! ./components/getMainRowConfig */ "./src/components/getMainRowConfig.js");
 const footer = __webpack_require__(/*! ./components/getFooter */ "./src/components/getFooter.js");
 const fillDataTable = __webpack_require__(/*! ./actions/fillDataTable */ "./src/actions/fillDataTable.js");
@@ -580,7 +781,12 @@ const startup = async () => {
   document.body.classList.add(`grey-111`);
 
   const svgContentElement = newElement(document.body, svgContent());
+  const bannerElement = newElement(document.body, banner(messages.bannerMessage));
   const headerElement = newElement(document.body, header());
+  const menuElement = newElement(document.body, menu());
+  const notificationsElement = newElement(document.body, notifications());
+  const settingsElement = newElement(document.body, settings());
+
   const mainRowElement = newElement(document.body, mainRow());
   const footerElement = newElement(document.body, footer());
 
