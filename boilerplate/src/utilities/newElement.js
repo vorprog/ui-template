@@ -6,27 +6,28 @@ const loop = require('../utilities/loop');
  * @property {string} xmlns - XML namespace (defaults to http://www.w3.org/1999/xhtml)
  * @property {string} textContent
  * @property {ElementConfig[]} children
+ * @property {Function} onclick
  */
 
 /**
- * @param {HTMLElement} parent
- * @param {ElementConfig} params
- * @returns {HTMLElement | SVGElement}
+ * @param {HTMLElement} parentElement
+ * @param {ElementConfig} elementConfig
+ * @returns {Element}
 */
-const newElement = (parent, params = {}) => {
-  const element = document.createElementNS(params.xmlns || `http://www.w3.org/1999/xhtml`, params.tag || `div`);
-  element.textContent = params.textContent || null;
-  loop(params.children, (key, child) => newElement(element, child));
-  if(params.onclick) element.addEventListener("click", params.onclick);
+const newElement = (parentElement, elementConfig = {}) => {
+  const element = document.createElementNS(elementConfig.xmlns || `http://www.w3.org/1999/xhtml`, elementConfig.tag || `div`);
+  element.textContent = elementConfig.textContent || null;
+  loop(elementConfig.children, (key, childConfig) => newElement(element, childConfig));
+  if(elementConfig.onclick) element.addEventListener("click", elementConfig.onclick);
 
-  delete params.xmlns;
-  delete params.tag;
-  delete params.textContent;
-  delete params.children;
-  delete params.onclick;
+  delete elementConfig.xmlns;
+  delete elementConfig.tag;
+  delete elementConfig.textContent;
+  delete elementConfig.children;
+  delete elementConfig.onclick;
 
-  loop(params, (key, value) => element.setAttribute(key, value || ``));
-  return parent.appendChild(element);
+  loop(elementConfig, (key, value) => element.setAttribute(key, value || ``));
+  return parentElement.appendChild(element);
 };
 
 module.exports = newElement;
