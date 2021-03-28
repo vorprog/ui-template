@@ -6,7 +6,7 @@ const loop = require('../utilities/loop');
  * @property {string} xmlns - XML namespace (defaults to http://www.w3.org/1999/xhtml)
  * @property {string} textContent
  * @property {ElementConfig[]} children
- * @property {Function} onclick
+ * @property {EventListener} onclick
  */
 
 /**
