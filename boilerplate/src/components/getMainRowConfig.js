@@ -1,4 +1,4 @@
-const svgButton = require('./getButton');
+const svgButton = require('./getButtonConfig');
 const input = require('./getInputConfig');
 
 /** @returns {import('../utilities/newElement').ElementConfig} */

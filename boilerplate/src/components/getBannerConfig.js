@@ -4,15 +4,15 @@ const toggleHiddenElement = require('../actions/toggleHiddenElement');
  * @param {string} bannerMessage
  * @returns {import('../utilities/newElement').ElementConfig}
  */
-module.exports = (bannerMessage) => ({
-  id: `banner`,
+module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
+  id: id,
   class: `blue-247 row`,
   children: [
     {},
     {
       class: `padded`,
       textContent: `X`,
-      onclick: () => toggleHiddenElement(`banner`)
+      onclick: () => toggleHiddenElement(id)
     }, {
       class: `padded row`,
       textContent: bannerMessage
