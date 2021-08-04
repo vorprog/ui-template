@@ -163,15 +163,15 @@ const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenEleme
  * @param {string} bannerMessage
  * @returns {import('../utilities/newElement').ElementConfig}
  */
-module.exports = (bannerMessage) => ({
-  id: `banner`,
+module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
+  id: id,
   class: `blue-247 row`,
   children: [
     {},
     {
       class: `padded`,
       textContent: `X`,
-      onclick: () => toggleHiddenElement(`banner`)
+      onclick: () => toggleHiddenElement(id)
     }, {
       class: `padded row`,
       textContent: bannerMessage
@@ -181,10 +181,10 @@ module.exports = (bannerMessage) => ({
 
 /***/ }),
 
-/***/ "./src/components/getButton.js":
-/*!*************************************!*\
-  !*** ./src/components/getButton.js ***!
-  \*************************************/
+/***/ "./src/components/getButtonConfig.js":
+/*!*******************************************!*\
+  !*** ./src/components/getButtonConfig.js ***!
+  \*******************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgConfig.js");
@@ -231,10 +231,10 @@ module.exports = (columnName) => ({
 
 /***/ }),
 
-/***/ "./src/components/getFooter.js":
-/*!*************************************!*\
-  !*** ./src/components/getFooter.js ***!
-  \*************************************/
+/***/ "./src/components/getFooterConfig.js":
+/*!*******************************************!*\
+  !*** ./src/components/getFooterConfig.js ***!
+  \*******************************************/
 /***/ ((module) => {
 
 /** @returns {import('../utilities/newElement').ElementConfig} */
@@ -335,7 +335,7 @@ module.exports = (params) => Object.assign(getBaseInputConfig(), params);
   \********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const svgButton = __webpack_require__(/*! ./getButton */ "./src/components/getButton.js");
+const svgButton = __webpack_require__(/*! ./getButtonConfig */ "./src/components/getButtonConfig.js");
 const input = __webpack_require__(/*! ./getInputConfig */ "./src/components/getInputConfig.js");
 
 /** @returns {import('../utilities/newElement').ElementConfig} */
@@ -532,6 +532,7 @@ module.exports = () => ({
     getSymbolConfig(`sort-symbol`, `M12 0l8 10h-16l8-10zm8 14h-16l8 10 8-10z`),
     getSymbolConfig(`sort-down-symbol`, `M12 0m8 7h-16l8 10 8-10z`),
     getSymbolConfig(`sort-up-symbol`, `M12 7l8 10h-16l8-10z`),
+    getSymbolConfig(`check-symbol`, `M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z`),
     getSymbolConfig(`switch-symbol`, `M18 18h-12c-3.311 0-6-2.689-6-6s2.689-6 6-6h12.039c3.293.021 5.961 2.701 5.961 6 0 3.311-2.688 6-6 6zm0-10h-12c-2.208 0-4 1.792-4 4s1.792 4 4 4h12c2.208 0 4-1.792 4-4 0-2.199-1.778-3.986-3.974-4h-.026zm-12 1c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3z`),
     getSymbolConfig(`profile-symbol`, `M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm7.753 18.305c-.261-.586-.789-.991-1.871-1.241-2.293-.529-4.428-.993-3.393-2.945 3.145-5.942.833-9.119-2.489-9.119-3.388 0-5.644 3.299-2.489 9.119 1.066 1.964-1.148 2.427-3.393 2.945-1.084.25-1.608.658-1.867 1.246-1.405-1.723-2.251-3.919-2.251-6.31 0-5.514 4.486-10 10-10s10 4.486 10 10c0 2.389-.845 4.583-2.247 6.305z`),
     getSymbolConfig(`settings-symbol`, `M24 13.616v-3.232c-1.651-.587-2.694-.752-3.219-2.019v-.001c-.527-1.271.1-2.134.847-3.707l-2.285-2.285c-1.561.742-2.433 1.375-3.707.847h-.001c-1.269-.526-1.435-1.576-2.019-3.219h-3.232c-.582 1.635-.749 2.692-2.019 3.219h-.001c-1.271.528-2.132-.098-3.707-.847l-2.285 2.285c.745 1.568 1.375 2.434.847 3.707-.527 1.271-1.584 1.438-3.219 2.02v3.232c1.632.58 2.692.749 3.219 2.019.53 1.282-.114 2.166-.847 3.707l2.285 2.286c1.562-.743 2.434-1.375 3.707-.847h.001c1.27.526 1.436 1.579 2.019 3.219h3.232c.582-1.636.75-2.69 2.027-3.222h.001c1.262-.524 2.12.101 3.698.851l2.285-2.286c-.744-1.563-1.375-2.433-.848-3.706.527-1.271 1.588-1.44 3.221-2.021zm-12 2.384c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4z`),
@@ -540,7 +541,11 @@ module.exports = () => ({
     getSymbolConfig(`search-symbol`, `M23.822 20.88l-6.353-6.354c.93-1.465 1.467-3.2 1.467-5.059.001-5.219-4.247-9.467-9.468-9.467s-9.468 4.248-9.468 9.468c0 5.221 4.247 9.469 9.468 9.469 1.768 0 3.421-.487 4.839-1.333l6.396 6.396 3.119-3.12zm-20.294-11.412c0-3.273 2.665-5.938 5.939-5.938 3.275 0 5.94 2.664 5.94 5.938 0 3.275-2.665 5.939-5.94 5.939-3.274 0-5.939-2.664-5.939-5.939z`),
     getSymbolConfig(`refresh-symbol`, `M9 12l-4.463 4.969-4.537-4.969h3c0-4.97 4.03-9 9-9 2.395 0 4.565.942 6.179 2.468l-2.004 2.231c-1.081-1.05-2.553-1.699-4.175-1.699-3.309 0-6 2.691-6 6h3zm10.463-4.969l-4.463 4.969h3c0 3.309-2.691 6-6 6-1.623 0-3.094-.65-4.175-1.699l-2.004 2.231c1.613 1.526 3.784 2.468 6.179 2.468 4.97 0 9-4.03 9-9h3l-4.537-4.969z`),
     getSymbolConfig(`add-symbol`, `M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10`),
-    getSymbolConfig(`remove-symbol`, `M0 10h24v4h-24z`)
+    getSymbolConfig(`remove-symbol`, `M0 10h24v4h-24z`),
+    getSymbolConfig(`close-symbol`, `M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z`),
+    getSymbolConfig(`view-symbol`, `M15 12c0 1.654-1.346 3-3 3s-3-1.346-3-3 1.346-3 3-3 3 1.346 3 3zm9-.449s-4.252 8.449-11.985 8.449c-7.18 0-12.015-8.449-12.015-8.449s4.446-7.551 12.015-7.551c7.694 0 11.985 7.551 11.985 7.551zm-7 .449c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z`),
+    getSymbolConfig(`edit-symbol`, `M7.127 22.564l-7.126 1.436 1.438-7.125 5.688 5.689zm-4.274-7.104l5.688 5.689 15.46-15.46-5.689-5.689-15.459 15.46z`),
+    getSymbolConfig(`download-symbol`, `M16 11h5l-9 10-9-10h5v-11h8v11zm3 8v3h-14v-3h-2v5h18v-5h-2z`),
   ]
 });
 
@@ -554,7 +559,7 @@ module.exports = () => ({
 /***/ ((module) => {
 
 module.exports = {
-  bannerMessage: `Hello! Welcome to my github pages website! This UI uses github's web api to help you view files and directories I keep in this repo.`,
+  bannerMessage: `Hello! Welcome to my github pages website (work in progress)! This UI uses github's web api to help you view files and directories I keep in this repo.`,
 };
 
 
@@ -698,27 +703,28 @@ const loop = __webpack_require__(/*! ../utilities/loop */ "./src/utilities/loop.
  * @property {string} xmlns - XML namespace (defaults to http://www.w3.org/1999/xhtml)
  * @property {string} textContent
  * @property {ElementConfig[]} children
+ * @property {EventListener} onclick
  */
 
 /**
- * @param {HTMLElement} parent
- * @param {ElementConfig} params
- * @returns {HTMLElement | SVGElement}
+ * @param {HTMLElement} parentElement
+ * @param {ElementConfig} elementConfig
+ * @returns {Element}
 */
-const newElement = (parent, params = {}) => {
-  const element = document.createElementNS(params.xmlns || `http://www.w3.org/1999/xhtml`, params.tag || `div`);
-  element.textContent = params.textContent || null;
-  loop(params.children, (key, child) => newElement(element, child));
-  if(params.onclick) element.addEventListener("click", params.onclick);
+const newElement = (parentElement, elementConfig = {}) => {
+  const element = document.createElementNS(elementConfig.xmlns || `http://www.w3.org/1999/xhtml`, elementConfig.tag || `div`);
+  element.textContent = elementConfig.textContent || null;
+  loop(elementConfig.children, (key, childConfig) => newElement(element, childConfig));
+  if(elementConfig.onclick) element.addEventListener("click", elementConfig.onclick);
 
-  delete params.xmlns;
-  delete params.tag;
-  delete params.textContent;
-  delete params.children;
-  delete params.onclick;
+  delete elementConfig.xmlns;
+  delete elementConfig.tag;
+  delete elementConfig.textContent;
+  delete elementConfig.children;
+  delete elementConfig.onclick;
 
-  loop(params, (key, value) => element.setAttribute(key, value || ``));
-  return parent.appendChild(element);
+  loop(elementConfig, (key, value) => element.setAttribute(key, value || ``));
+  return parentElement.appendChild(element);
 };
 
 module.exports = newElement;
@@ -769,7 +775,7 @@ const menu = __webpack_require__(/*! ./components/getMenuConfig */ "./src/compon
 const notifications = __webpack_require__(/*! ./components/getNotificationsConfig */ "./src/components/getNotificationsConfig.js");
 const settings = __webpack_require__(/*! ./components/getSettingsConfig */ "./src/components/getSettingsConfig.js");
 const mainRow = __webpack_require__(/*! ./components/getMainRowConfig */ "./src/components/getMainRowConfig.js");
-const footer = __webpack_require__(/*! ./components/getFooter */ "./src/components/getFooter.js");
+const footer = __webpack_require__(/*! ./components/getFooterConfig */ "./src/components/getFooterConfig.js");
 const fillDataTable = __webpack_require__(/*! ./actions/fillDataTable */ "./src/actions/fillDataTable.js");
 
 const startup = async () => {
@@ -781,7 +787,7 @@ const startup = async () => {
   document.body.classList.add(`grey-111`);
 
   const svgContentElement = newElement(document.body, svgContent());
-  const bannerElement = newElement(document.body, banner(messages.bannerMessage));
+  const bannerElement = newElement(document.body, banner(messages.bannerMessage, `welcome-banner`));
   const headerElement = newElement(document.body, header());
   const menuElement = newElement(document.body, menu());
   const notificationsElement = newElement(document.body, notifications());
