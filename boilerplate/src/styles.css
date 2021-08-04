@@ -24,6 +24,14 @@ table {
   white-space: nowrap;
 }
 
+.autofill {
+  display: table;
+}
+
+.autofilling {
+  display: table-cell;
+}
+
 .input {
   min-width: 25%;
   flex: 1;

@@ -7,17 +7,15 @@ const svg = require('./getSvgConfig');
  */
 module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
   id: id,
-  class: `blue-247 row`,
-  style: `display:table;`,
+  class: `blue-247 autofill row`,
   children: [
         {
-      class: `padded`,
-      style: `display:table-cell;`,
+      class: `padded autofilling`,
       textContent: bannerMessage
     },
     {
+      class: `autofilling`,
       onclick: () => toggleHiddenElement(id),
-      style: `display:table-cell;`,
       children: [svg(`close`, { id: `banner-close-svg`, height: 12, width: 12, fill: `#BBB`})]
     }
   ]
