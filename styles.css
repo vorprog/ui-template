@@ -40,6 +40,10 @@ table {
   right: 0;
 }
 
+.hidden {
+  display: none;
+}
+
 .padded {
   margin-top: 5px;
   margin-bottom: 5px;
