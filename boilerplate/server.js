@@ -1,6 +1,10 @@
 const filesystem = require('fs');
 const http = require('http');
 
+const username = process.env.GITHUB_USERNAME;
+const userNameIsSet = username && typeof (username) === `string`  && username.trim() !== ``;
+if(!userNameIsSet) throw new Error(`GITHUB_USERNAME environment variable is not set.`)
+
 const indexHTMLContent = `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,7 +13,7 @@ const indexHTMLContent = `<!DOCTYPE html>
     <link rel="stylesheet" href="styles.css">
     <script>
       window.env = {};
-      window.env.GITHUB_USERNAME = "${process.env.GITHUB_USERNAME}";
+      window.env.GITHUB_USERNAME = "${username}";
     </script>
     <script src="./main.js"></script>
   </head>
@@ -38,5 +42,6 @@ const serve = (request, response) => {
   response.end(requestedFileData);
 };
 
-http.createServer(serve).listen(process.env.NODE_LISTENER_PORT);
-console.log(`listening on port ${process.env.NODE_LISTENER_PORT}`);
+const listeningPort = process.env.NODE_LISTENER_PORT || 8080;
+http.createServer(serve).listen(listeningPort);
+console.log(`listening on port ${listeningPort}`);
