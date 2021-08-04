@@ -53,14 +53,8 @@ table {
 }
 
 .padded {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  padding-left: 3px;
-  padding-right: 3px;
+  margin: 1px;
+  padding: 3px;
 }
 
 .row {
