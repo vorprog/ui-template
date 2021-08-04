@@ -1,4 +1,4 @@
-const svg = require('./getSvgConfig');
+const button = require('./getButtonConfig');
 
 /**
  * @param {string} columnName
@@ -12,7 +12,7 @@ module.exports = (columnName) => ({
       class: `resizable`,
       textContent: `${columnName}`,
       children: [
-        svg(`sort-symbol`)
+        button(`sort`)
       ]
     },
   ]

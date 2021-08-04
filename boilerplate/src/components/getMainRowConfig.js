@@ -5,10 +5,10 @@ const input = require('./getInputConfig');
 const getActionButtonsConfig = () => ({
   id: `action-buttons`,
   children: [
-    svgButton(`refresh-symbol`, 24),
-    svgButton(`add-symbol`, 24),
-    svgButton(`remove-symbol`, 24),
-    svgButton(`sort-down-symbol`, 24)
+    svgButton(`refresh`),
+    svgButton(`add`),
+    svgButton(`remove`),
+    svgButton(`sort-down`)
   ]
 });
 

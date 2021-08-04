@@ -158,6 +158,7 @@ module.exports = (elementId) => {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenElement */ "./src/actions/toggleHiddenElement.js");
+const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgConfig.js");
 
 /** 
  * @param {string} bannerMessage
@@ -166,16 +167,19 @@ const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenEleme
 module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
   id: id,
   class: `blue-247 row`,
+  style: `display:table;`,
   children: [
-    {},
-    {
+        {
       class: `padded`,
-      textContent: `X`,
-      onclick: () => toggleHiddenElement(id)
-    }, {
-      class: `padded row`,
+      style: `display:table-cell;`,
       textContent: bannerMessage
-    }]
+    },
+    {
+      onclick: () => toggleHiddenElement(id),
+      style: `display:table-cell;`,
+      children: [svg(`close`, { id: `banner-close-svg`, height: 12, width: 12, fill: `#BBB`})]
+    }
+  ]
 });
 
 
@@ -191,14 +195,14 @@ const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgCo
 
 /**
  * @param {string} symbolName
- * @param {Number} size
  * @returns {import('../utilities/newElement').ElementConfig}
  */
-module.exports = (symbolName, size = 12) => {
-  const svgConfig = svg(symbolName, size);
-  svgConfig.class += ` curved grey-border`
-  return svgConfig;
-};
+module.exports = (symbolName, customConfig = {}) => svg(symbolName, Object.assign({
+  width: 24,
+  height: 24,
+  class: `padded curved grey-border`
+}, customConfig))
+
 
 /***/ }),
 
@@ -208,7 +212,7 @@ module.exports = (symbolName, size = 12) => {
   \*************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgConfig.js");
+const button = __webpack_require__(/*! ./getButtonConfig */ "./src/components/getButtonConfig.js");
 
 /**
  * @param {string} columnName
@@ -222,7 +226,7 @@ module.exports = (columnName) => ({
       class: `resizable`,
       textContent: `${columnName}`,
       children: [
-        svg(`sort-symbol`)
+        button(`sort`)
       ]
     },
   ]
@@ -274,11 +278,11 @@ const getBaseHeaderConfig = () => ({
       {
         id: `menu-button`,
         onclick: () => (toggleHiddenElement(`menu`)),
-        children: [svg(`menu-symbol`, 40)]
+        children: [svg(`menu`)]
       },
       {
         onclick: () => (toggleHiddenElement(`search`)),
-        children: [svg(`search-symbol`, 40)]
+        children: [svg(`search`)]
       }
     ]
   },
@@ -287,11 +291,11 @@ const getBaseHeaderConfig = () => ({
     children: [
       {
         onclick: () => (toggleHiddenElement(`notifications`)),
-        children: [svg(`notifications-symbol`, 40)]
+        children: [svg(`notifications`)]
       },
       {
         onclick: () => (toggleHiddenElement(`settings`)),
-        children: [svg(`settings-symbol`, 40)]
+        children: [svg(`settings`)]
       }
     ]
   }]
@@ -342,10 +346,10 @@ const input = __webpack_require__(/*! ./getInputConfig */ "./src/components/getI
 const getActionButtonsConfig = () => ({
   id: `action-buttons`,
   children: [
-    svgButton(`refresh-symbol`, 24),
-    svgButton(`add-symbol`, 24),
-    svgButton(`remove-symbol`, 24),
-    svgButton(`sort-down-symbol`, 24)
+    svgButton(`refresh`),
+    svgButton(`add`),
+    svgButton(`remove`),
+    svgButton(`sort-down`)
   ]
 });
 
@@ -480,23 +484,23 @@ module.exports = (params = {}) => Object.assign(getBaseSettingsConfig(), params)
 
 /** 
  * @param {string} symbolName
- * @param {Number} size
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
  * @returns {import('../utilities/newElement').ElementConfig}
  */
-module.exports = (symbolName, size = 12) => ({
+ module.exports = (symbolName, customConfig = {}) => Object.assign({
   xmlns: `http://www.w3.org/2000/svg`,
   tag: `svg`,
   id: `${symbolName}-svg`,
-  width: `${size}`,
-  height: `${size}`,
+  width: `40`,
+  height: `40`,
   class: `padded`,
   viewBox: `0 0 24 24`,
   children: [{
     xmlns: `http://www.w3.org/2000/svg`,
     tag: `use`,
-    href: `#${symbolName}`,
+    href: `#${symbolName}-symbol`,
   }]
-});
+}, customConfig)
 
 
 /***/ }),

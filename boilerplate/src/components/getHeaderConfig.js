@@ -11,11 +11,11 @@ const getBaseHeaderConfig = () => ({
       {
         id: `menu-button`,
         onclick: () => (toggleHiddenElement(`menu`)),
-        children: [svg(`menu-symbol`, 40)]
+        children: [svg(`menu`)]
       },
       {
         onclick: () => (toggleHiddenElement(`search`)),
-        children: [svg(`search-symbol`, 40)]
+        children: [svg(`search`)]
       }
     ]
   },
@@ -24,11 +24,11 @@ const getBaseHeaderConfig = () => ({
     children: [
       {
         onclick: () => (toggleHiddenElement(`notifications`)),
-        children: [svg(`notifications-symbol`, 40)]
+        children: [svg(`notifications`)]
       },
       {
         onclick: () => (toggleHiddenElement(`settings`)),
-        children: [svg(`settings-symbol`, 40)]
+        children: [svg(`settings`)]
       }
     ]
   }]
