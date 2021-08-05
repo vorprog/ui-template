@@ -38,6 +38,14 @@ table {
   white-space: nowrap;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:active {
+  filter: brightness(50%);
+}
+
 .popup {
   display: block;
   position: absolute;
