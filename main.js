@@ -151,6 +151,30 @@ module.exports = (elementId) => {
 
 /***/ }),
 
+/***/ "./src/components/getActionsbuttonsConfig.js":
+/*!***************************************************!*\
+  !*** ./src/components/getActionsbuttonsConfig.js ***!
+  \***************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const button = __webpack_require__(/*! ./getButtonConfig */ "./src/components/getButtonConfig.js");
+
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+module.exports = (customConfig = {}) => Object.assign({
+  id: `action-buttons`,
+  children: [
+    button(`refresh`),
+    button(`add`),
+    button(`remove`),
+    button(`sort-down`)
+  ]
+}, customConfig);
+
+/***/ }),
+
 /***/ "./src/components/getBannerConfig.js":
 /*!*******************************************!*\
   !*** ./src/components/getBannerConfig.js ***!
@@ -166,17 +190,15 @@ const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgCo
  */
 module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
   id: id,
-  class: `blue-247 row`,
-  style: `display:table;`,
+  class: `blue-247 autofill row`,
   children: [
         {
-      class: `padded`,
-      style: `display:table-cell;`,
+      class: `padded autofilling`,
       textContent: bannerMessage
     },
     {
+      class: `autofilling`,
       onclick: () => toggleHiddenElement(id),
-      style: `display:table-cell;`,
       children: [svg(`close`, { id: `banner-close-svg`, height: 12, width: 12, fill: `#BBB`})]
     }
   ]
@@ -241,20 +263,17 @@ module.exports = (columnName) => ({
   \*******************************************/
 /***/ ((module) => {
 
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getBaseFooterConfig = () => ({
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+ module.exports = (customConfig = {}) => Object.assign({
   id: `footer`,
   class: `grey row`,
   children: [{
     textContent: `FOOTER`
   }]
-});
-
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
-module.exports = (params = {}) => Object.assign(getBaseFooterConfig(), params);
+}, customConfig);
 
 
 /***/ }),
@@ -268,8 +287,11 @@ module.exports = (params = {}) => Object.assign(getBaseFooterConfig(), params);
 const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgConfig.js");
 const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenElement */ "./src/actions/toggleHiddenElement.js");
 
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getBaseHeaderConfig = () => ({
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+ module.exports = (customConfig = {}) => Object.assign({
   id: `header`,
   class: `grey-666 row`,
   children: [{
@@ -299,13 +321,7 @@ const getBaseHeaderConfig = () => ({
       }
     ]
   }]
-});
-
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
-module.exports = (params) => Object.assign(getBaseHeaderConfig(), params);
+}, customConfig);
 
 
 /***/ }),
@@ -316,19 +332,16 @@ module.exports = (params) => Object.assign(getBaseHeaderConfig(), params);
   \******************************************/
 /***/ ((module) => {
 
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getBaseInputConfig = () => ({
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+ module.exports = (customConfig = {}) => Object.assign({
   id: `input-filter`,
   class: `grey-222 padded curved input`,
   contenteditable: `true`,
   placeholder: `filter . . .`
-});
-
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
-module.exports = (params) => Object.assign(getBaseInputConfig(), params);
+}, customConfig);
 
 
 /***/ }),
@@ -339,40 +352,29 @@ module.exports = (params) => Object.assign(getBaseInputConfig(), params);
   \********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const svgButton = __webpack_require__(/*! ./getButtonConfig */ "./src/components/getButtonConfig.js");
 const input = __webpack_require__(/*! ./getInputConfig */ "./src/components/getInputConfig.js");
+const getActionButtonsConfig = __webpack_require__(/*! ./getActionsbuttonsConfig */ "./src/components/getActionsbuttonsConfig.js");
 
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getActionButtonsConfig = () => ({
-  id: `action-buttons`,
-  children: [
-    svgButton(`refresh`),
-    svgButton(`add`),
-    svgButton(`remove`),
-    svgButton(`sort-down`)
-  ]
-});
-
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getBaseMainRowConfig = () => ({
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+ module.exports = (customConfig = {}) => Object.assign({
   id: `main-row`,
   class: `row`,
   children: [{
     id: `action-bar`,
     class: `grey-444 row`,
-    children: [input({ id: `filter-input` }), getActionButtonsConfig()]
+    children: [
+      input({ id: `filter-input` }), 
+      getActionButtonsConfig()
+    ]
   }, {
     tag: `table`,
     id: `data-table`,
     class: `grey-222 row`
   }]
-});
-
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
-module.exports = (params) => Object.assign(getBaseMainRowConfig(), params);
+}, customConfig);
 
 
 /***/ }),
@@ -383,8 +385,11 @@ module.exports = (params) => Object.assign(getBaseMainRowConfig(), params);
   \*****************************************/
 /***/ ((module) => {
 
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getBaseMenuConfig = () => ({
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+ module.exports = (customConfig = {}) => Object.assign({
   id: `menu`,
   class: `grey-333 hidden popup`,
   children: [{
@@ -399,13 +404,7 @@ const getBaseMenuConfig = () => ({
     class: `grey-border padded`,
     textContent: `Section 3`
   }]
-});
-
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
-module.exports = (params = {}) => Object.assign(getBaseMenuConfig(), params);
+}, customConfig);
 
 
 /***/ }),
@@ -416,8 +415,11 @@ module.exports = (params = {}) => Object.assign(getBaseMenuConfig(), params);
   \**************************************************/
 /***/ ((module) => {
 
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getBaseNotificationsConfig = () => ({
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+ module.exports = (customConfig = {}) => Object.assign({
   id: `notifications`,
   class: `grey-333 hidden right-side popup`,
   children: [{
@@ -432,13 +434,7 @@ const getBaseNotificationsConfig = () => ({
     class: `grey-border padded`,
     textContent: `Notification 3`
   }]
-});
-
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
-module.exports = (params = {}) => Object.assign(getBaseNotificationsConfig(), params);
+}, customConfig);
 
 
 /***/ }),
@@ -449,8 +445,11 @@ module.exports = (params = {}) => Object.assign(getBaseNotificationsConfig(), pa
   \*********************************************/
 /***/ ((module) => {
 
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getBaseSettingsConfig = () => ({
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+ module.exports = (customConfig = {}) => Object.assign({
   id: `settings`,
   class: `grey-333 hidden right-side popup`,
   children: [{
@@ -465,13 +464,7 @@ const getBaseSettingsConfig = () => ({
     class: `grey-border padded`,
     textContent: `Log out`
   }]
-});
-
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
-module.exports = (params = {}) => Object.assign(getBaseSettingsConfig(), params);
+}, customConfig);
 
 
 /***/ }),
@@ -500,7 +493,7 @@ module.exports = (params = {}) => Object.assign(getBaseSettingsConfig(), params)
     tag: `use`,
     href: `#${symbolName}-symbol`,
   }]
-}, customConfig)
+}, customConfig);
 
 
 /***/ }),
@@ -523,10 +516,7 @@ const getSymbolConfig = (symbolId, pathDataString) => ({
   }]
 });
 
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
+/** @returns {import('../utilities/newElement').ElementConfig} */
 module.exports = () => ({
   xmlns: `http://www.w3.org/2000/svg`,
   tag: `svg`,
