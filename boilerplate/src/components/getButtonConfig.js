@@ -7,5 +7,5 @@ const svg = require(`./getSvgConfig`);
 module.exports = (symbolName, customConfig = {}) => svg(symbolName, Object.assign({
   width: 24,
   height: 24,
-  class: `padded curved grey-border`
+  class: `clickable padded curved grey-border`
 }, customConfig))
