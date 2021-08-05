@@ -10,10 +10,7 @@ const getSymbolConfig = (symbolId, pathDataString) => ({
   }]
 });
 
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
+/** @returns {import('../utilities/newElement').ElementConfig} */
 module.exports = () => ({
   xmlns: `http://www.w3.org/2000/svg`,
   tag: `svg`,

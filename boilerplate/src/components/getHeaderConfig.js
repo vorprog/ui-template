@@ -1,8 +1,11 @@
 const svg = require('./getSvgConfig');
 const toggleHiddenElement = require('../actions/toggleHiddenElement');
 
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getBaseHeaderConfig = () => ({
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+ module.exports = (customConfig = {}) => Object.assign({
   id: `header`,
   class: `grey-666 row`,
   children: [{
@@ -32,10 +35,4 @@ const getBaseHeaderConfig = () => ({
       }
     ]
   }]
-});
-
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
-module.exports = (params) => Object.assign(getBaseHeaderConfig(), params);
+}, customConfig);

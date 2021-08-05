@@ -1,5 +1,8 @@
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getBaseSettingsConfig = () => ({
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+ module.exports = (customConfig = {}) => Object.assign({
   id: `settings`,
   class: `grey-333 hidden right-side popup`,
   children: [{
@@ -14,10 +17,4 @@ const getBaseSettingsConfig = () => ({
     class: `grey-border padded`,
     textContent: `Log out`
   }]
-});
-
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
-module.exports = (params = {}) => Object.assign(getBaseSettingsConfig(), params);
+}, customConfig);

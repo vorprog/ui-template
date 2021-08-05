@@ -16,4 +16,4 @@
     tag: `use`,
     href: `#${symbolName}-symbol`,
   }]
-}, customConfig)
+}, customConfig);

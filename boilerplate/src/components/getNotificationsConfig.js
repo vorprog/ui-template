@@ -1,5 +1,8 @@
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getBaseNotificationsConfig = () => ({
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+ module.exports = (customConfig = {}) => Object.assign({
   id: `notifications`,
   class: `grey-333 hidden right-side popup`,
   children: [{
@@ -14,10 +17,4 @@ const getBaseNotificationsConfig = () => ({
     class: `grey-border padded`,
     textContent: `Notification 3`
   }]
-});
-
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
-module.exports = (params = {}) => Object.assign(getBaseNotificationsConfig(), params);
+}, customConfig);

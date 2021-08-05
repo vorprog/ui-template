@@ -1,5 +1,8 @@
-/** @returns {import('../utilities/newElement').ElementConfig} */
-const getBaseMenuConfig = () => ({
+/** 
+ * @param {import('../utilities/newElement').ElementConfig} customConfig
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+ module.exports = (customConfig = {}) => Object.assign({
   id: `menu`,
   class: `grey-333 hidden popup`,
   children: [{
@@ -14,10 +17,4 @@ const getBaseMenuConfig = () => ({
     class: `grey-border padded`,
     textContent: `Section 3`
   }]
-});
-
-/**
- * @param {import('../utilities/newElement').ElementConfig} params
- * @returns {import('../utilities/newElement').ElementConfig}
- */
-module.exports = (params = {}) => Object.assign(getBaseMenuConfig(), params);
+}, customConfig);
