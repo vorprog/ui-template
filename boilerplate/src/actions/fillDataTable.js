@@ -1,6 +1,7 @@
 const columnHeader = require('../components/getColumnHeaderConfig');
 const util = require('../utilities/all');
 const makeGithubContentsRequest = require('./makeGithubContentsRequest');
+const getButtonConfig = require('../components/getButtonConfig');
 
 const githubPagesDomain = `${window.env.GITHUB_USERNAME}.github.io`;
 
@@ -29,10 +30,10 @@ const fillDataTable = async (path = ``) => {
       {
         tag: `td`,
         class: `grey-border`,
-        onclick: () => (fillDataTable(parentPath)),
-        children: [{
-          textContent: `../`
-        }]
+        children: [
+                getButtonConfig(`folder`, { height: `12px`, width: `12px`, onclick: () => (fillDataTable(parentPath))}),
+                { tag: `a`, textContent: `../` }
+        ]
       },
       {
         tag: `td`,
@@ -70,13 +71,15 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
       {
         tag: `td`,
         class: `grey-border`,
-        onclick: value.type === `dir` ? () => (fillDataTable(value.path)) : undefined,
-        children: [{
-          tag: `a`,
-          href: value.type === `dir` ? value.html_url : value.download_url,
-          target: `_blank`,
-          textContent: value.name
-        }]
+        children: [
+          value.type === `dir` ? getButtonConfig(`folder`, { height: `12px`, width: `12px`, onclick: () => (fillDataTable(value.path)) }) : {}, 
+          {
+            tag: `a`,
+            href: value.type === `dir` ? value.html_url : value.download_url,
+            target: `_blank`,
+            textContent: value.name
+          }
+        ]
       },
       {
         tag: `td`,
