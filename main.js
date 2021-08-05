@@ -38,7 +38,7 @@ const fillDataTable = async (path = ``) => {
     children: [
       {
         tag: `td`,
-        class: `grey-border`,
+        class: `padded grey-border`,
         children: [
                 getButtonConfig(`folder`, { height: `12px`, width: `12px`, onclick: () => (fillDataTable(parentPath))}),
                 { tag: `a`, textContent: `../` }
@@ -46,12 +46,12 @@ const fillDataTable = async (path = ``) => {
       },
       {
         tag: `td`,
-        class: `grey-border`,
+        class: `padded grey-border`,
         textContent: `dir`
       },
       {
         tag: `td`,
-        class: `grey-border`,
+        class: `padded grey-border`,
         children: [{
           textContent: `N/A`
         }]
@@ -79,7 +79,7 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
     children: [
       {
         tag: `td`,
-        class: `grey-border`,
+        class: `padded grey-border`,
         children: [
           value.type === `dir` ? getButtonConfig(`folder`, { height: `12px`, width: `12px`, onclick: () => (fillDataTable(value.path)) }) : {}, 
           {
@@ -92,12 +92,12 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
       },
       {
         tag: `td`,
-        class: `grey-border`,
+        class: `padded grey-border`,
         textContent: value.type
       },
       {
         tag: `td`,
-        class: `grey-border`,
+        class: `padded grey-border`,
         children: [{
           tag: `a`,
           href: `https://${githubPagesDomain}/${value.path}`,
