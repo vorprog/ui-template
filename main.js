@@ -193,7 +193,7 @@ const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgCo
  */
 module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
   id: id,
-  class: `blue-247 autofill row`,
+  class: `blue-35a autofill row`,
   children: [
         {
       class: `padded autofilling`,

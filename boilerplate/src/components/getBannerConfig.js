@@ -7,7 +7,7 @@ const svg = require('./getSvgConfig');
  */
 module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
   id: id,
-  class: `blue-247 autofill row`,
+  class: `blue-35a autofill row`,
   children: [
         {
       class: `padded autofilling`,
