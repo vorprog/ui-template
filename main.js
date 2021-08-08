@@ -11,8 +11,10 @@ const columnHeader = __webpack_require__(/*! ../components/getColumnHeaderConfig
 const util = __webpack_require__(/*! ../utilities/all */ "./src/utilities/all.js");
 const makeGithubContentsRequest = __webpack_require__(/*! ./makeGithubContentsRequest */ "./src/actions/makeGithubContentsRequest.js");
 const getButtonConfig = __webpack_require__(/*! ../components/getButtonConfig */ "./src/components/getButtonConfig.js");
+const updateQueryString = __webpack_require__(/*! ../utilities/updateQueryString */ "./src/utilities/updateQueryString.js");
 
 const githubPagesDomain = `${window.env.GITHUB_USERNAME}.github.io`;
+const setDirectory = (path) => updateQueryString(`directory`, path);
 
 const fillDataTable = async (path = ``) => {
   const requestContentsTask = makeGithubContentsRequest(path);
@@ -40,7 +42,11 @@ const fillDataTable = async (path = ``) => {
         tag: `td`,
         class: `padded grey-border`,
         children: [
-                getButtonConfig(`folder`, { height: `12px`, width: `12px`, onclick: () => (fillDataTable(parentPath))}),
+                getButtonConfig(`folder`, {
+                  height: `12px`, 
+                  width: `12px`, 
+                  onclick: () => fillDataTable(parentPath) && setDirectory(parentPath)
+                }),
                 { tag: `a`, textContent: `../` }
         ]
       },
@@ -81,7 +87,13 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
         tag: `td`,
         class: `padded grey-border`,
         children: [
-          value.type === `dir` ? getButtonConfig(`folder`, { height: `12px`, width: `12px`, onclick: () => (fillDataTable(value.path)) }) : {}, 
+          value.type === `dir` ?
+            getButtonConfig(`folder`, {
+              height: `12px`,
+              width: `12px`,
+              onclick: () => fillDataTable(value.path) && setDirectory(value.path)
+            })
+          : {},
           {
             tag: `a`,
             href: value.type === `dir` ? value.html_url : value.download_url,
@@ -737,6 +749,28 @@ const newElement = (parentElement, elementConfig = {}) => {
 module.exports = newElement;
 
 
+/***/ }),
+
+/***/ "./src/utilities/updateQueryString.js":
+/*!********************************************!*\
+  !*** ./src/utilities/updateQueryString.js ***!
+  \********************************************/
+/***/ ((module) => {
+
+/**
+ * 
+ * @param {string} key 
+ * @param {string} value 
+ * @returns {void}
+ */
+module.exports = (key, value) => {
+  const params = new URLSearchParams(location.search);
+  params.set(key, value);
+  const newUrl = `${location.origin}${location.pathname}?${params.toString()}`;
+  window.history.replaceState({}, '', newUrl);
+};
+
+
 /***/ })
 
 /******/ 	});
@@ -788,9 +822,6 @@ const fillDataTable = __webpack_require__(/*! ./actions/fillDataTable */ "./src/
 const startup = async () => {
   console.log(`Document intialized.`);
 
-  const urlParams = new URLSearchParams(window.location.search);
-  loop(Object.fromEntries(urlParams), (key, value) => console.log(`Key: ${key}, Value: ${value}`));
-
   document.body.classList.add(`grey-111`);
 
   const svgContentElement = newElement(document.body, svgContent());
@@ -805,7 +836,8 @@ const startup = async () => {
 
   document.getElementById(`filter-input`).focus();
 
-  await fillDataTable();
+  const targetDirectory = new URLSearchParams(location.search).get(`directory`) || ``;
+  await fillDataTable(targetDirectory);
 };
 
 (async () => {

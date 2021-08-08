@@ -14,9 +14,6 @@ const fillDataTable = require('./actions/fillDataTable');
 const startup = async () => {
   console.log(`Document intialized.`);
 
-  const urlParams = new URLSearchParams(window.location.search);
-  loop(Object.fromEntries(urlParams), (key, value) => console.log(`Key: ${key}, Value: ${value}`));
-
   document.body.classList.add(`grey-111`);
 
   const svgContentElement = newElement(document.body, svgContent());
@@ -31,7 +28,8 @@ const startup = async () => {
 
   document.getElementById(`filter-input`).focus();
 
-  await fillDataTable();
+  const targetDirectory = new URLSearchParams(location.search).get(`directory`) || ``;
+  await fillDataTable(targetDirectory);
 };
 
 (async () => {

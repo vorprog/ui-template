@@ -2,8 +2,10 @@ const columnHeader = require('../components/getColumnHeaderConfig');
 const util = require('../utilities/all');
 const makeGithubContentsRequest = require('./makeGithubContentsRequest');
 const getButtonConfig = require('../components/getButtonConfig');
+const updateQueryString = require('../utilities/updateQueryString');
 
 const githubPagesDomain = `${window.env.GITHUB_USERNAME}.github.io`;
+const setDirectory = (path) => updateQueryString(`directory`, path);
 
 const fillDataTable = async (path = ``) => {
   const requestContentsTask = makeGithubContentsRequest(path);
@@ -31,7 +33,11 @@ const fillDataTable = async (path = ``) => {
         tag: `td`,
         class: `padded grey-border`,
         children: [
-                getButtonConfig(`folder`, { height: `12px`, width: `12px`, onclick: () => (fillDataTable(parentPath))}),
+                getButtonConfig(`folder`, {
+                  height: `12px`, 
+                  width: `12px`, 
+                  onclick: () => fillDataTable(parentPath) && setDirectory(parentPath)
+                }),
                 { tag: `a`, textContent: `../` }
         ]
       },
@@ -72,7 +78,13 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
         tag: `td`,
         class: `padded grey-border`,
         children: [
-          value.type === `dir` ? getButtonConfig(`folder`, { height: `12px`, width: `12px`, onclick: () => (fillDataTable(value.path)) }) : {}, 
+          value.type === `dir` ?
+            getButtonConfig(`folder`, {
+              height: `12px`,
+              width: `12px`,
+              onclick: () => fillDataTable(value.path) && setDirectory(value.path)
+            })
+          : {},
           {
             tag: `a`,
             href: value.type === `dir` ? value.html_url : value.download_url,
