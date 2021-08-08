@@ -26,11 +26,13 @@ filesystem.copyFileSync(`./src/styles.css`, `./dist/styles.css`);
 
 /** @type {http.RequestListener} */
 const serve = (request, response) => {
-  if(request.url === `/`) request.url = `/index.html`;
-
   let requestedFileData;
   try {
-    requestedFileData = filesystem.readFileSync(`./dist${request.url}`);
+    const urlFilePath = request.url.split(`?`)[0];
+    if(urlFilePath === `/`) urlFilePath = `/index.html`;
+    //TODO: fix subsequent request for '/' that doesn't seem to be forwarding to '/index.html'
+    console.log(`Request URL is: ${urlFilePath}`);
+    requestedFileData = filesystem.readFileSync(`./dist${urlFilePath}`);
   } catch (error) {
     response.writeHead(404);
     response.end(`The requested URL ${request.url} was not found on this server.`);
