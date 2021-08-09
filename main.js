@@ -364,7 +364,7 @@ const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenEleme
   id: `input-filter`,
   class: `grey-222 padded curved input`,
   contenteditable: `true`,
-  placeholder: `filter . . .`
+  placeholder: `(work in progress) . . .`
 }, customConfig);
 
 
