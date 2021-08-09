@@ -205,16 +205,18 @@ const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgCo
  */
 module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
   id: id,
-  class: `blue-35a autofill row`,
+  class: `blue-35a row`,
   children: [
-        {
-      class: `padded autofilling`,
-      textContent: bannerMessage
+    {
+      class: `row`,
+      children: [
+        {}, // spacer
+        svg(`close`, { id: `banner-close-svg`, height: 24, width: 24, fill: `#BBB`, onclick: () => toggleHiddenElement(id) })
+      ]
     },
     {
-      class: `autofilling`,
-      onclick: () => toggleHiddenElement(id),
-      children: [svg(`close`, { id: `banner-close-svg`, height: 12, width: 12, fill: `#BBB`})]
+      class: `padded row`,
+      textContent: bannerMessage
     }
   ]
 });
