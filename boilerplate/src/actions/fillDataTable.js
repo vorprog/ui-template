@@ -36,8 +36,18 @@ const fillDataTable = async (path = ``) => {
   generateRows(dataTable, contents);
 };
 
+/**
+ * @param {HTMLElement} tableCellElement
+ */
+const toggleRowSelection = (tableCellElement) => {
+  const parentTableRowClasses = tableCellElement.parentElement.classList;
+  if(parentTableRowClasses.contains(`blue-35a`)) parentTableRowClasses.remove(`blue-35a`)
+  else parentTableRowClasses.add(`blue-35a`);
+}
+
 const parentDirectoryRowConfig = (path) => ({
   tag: `tr`,
+  onclick: (event) => toggleRowSelection(event.target),
   children: [
     {
       tag: `td`,
@@ -75,6 +85,7 @@ const parentDirectoryRowConfig = (path) => ({
 const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @type {import('./makeGithubContentsRequest').GithubResponse} */ value) =>
   util.newElement(tableElement, {
     tag: `tr`,
+    onclick: (event) => toggleRowSelection(event.target),
     id: `data-${key}`,
     children: [
       {
