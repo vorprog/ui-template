@@ -18,43 +18,15 @@ const fillDataTable = async (path = ``) => {
     tag: `tr`,
     class: `grey-444`,
     children: [
+      { tag: `td`},
       columnHeader(`name`),
       columnHeader(`type`),
       columnHeader(`download link`)
     ]
   });
 
-  const parentPath = path.substr(0, path.lastIndexOf(`/`) || path.length-1);
-
-  util.newElement(dataTable, {
-    tag: `tr`,
-    children: [
-      {
-        tag: `td`,
-        class: `padded grey-border`,
-        children: [
-                getButtonConfig(`folder`, {
-                  height: `12px`, 
-                  width: `12px`, 
-                  onclick: () => fillDataTable(parentPath) && setDirectory(parentPath)
-                }),
-                { tag: `a`, textContent: `../` }
-        ]
-      },
-      {
-        tag: `td`,
-        class: `padded grey-border`,
-        textContent: `dir`
-      },
-      {
-        tag: `td`,
-        class: `padded grey-border`,
-        children: [{
-          textContent: `N/A`
-        }]
-      }
-    ]
-  });
+  const parentPath = path.substr(0, path.lastIndexOf(`/`) || path.length - 1);
+  if (path && path != ``) util.newElement(dataTable, );
 
   const contentsReponse = await requestContentsTask;
   if (contentsReponse.status !== 200) throw new Error(`Github returned status code ${contentsReponse.status} ${await contentsReponse.text()}`);
@@ -63,6 +35,37 @@ const fillDataTable = async (path = ``) => {
   const contents = await contentsReponse.json();
   generateRows(dataTable, contents);
 };
+
+const parentDirectoryRowConfig = () => ({
+  tag: `tr`,
+  children: [
+    {
+      tag: `td`,
+      class: `padded grey-border`,
+      children: [
+        getButtonConfig(`folder`, {
+          height: `20px`,
+          width: `20px`,
+          onclick: () => fillDataTable(parentPath) && setDirectory(parentPath)
+        })
+      ]
+    },
+    {
+      tag: `td`,
+      class: `padded grey-border`,
+      children: [{ tag: `a`, textContent: `../` }]
+    },
+    {
+      tag: `td`,
+      class: `padded grey-border`,
+      textContent: `dir`
+    },
+    {
+      tag: `td`,
+      class: `padded grey-border`,
+    }
+  ]
+});
 
 /**
  * @param {HTMLElement} tableElement 
@@ -77,14 +80,17 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
       {
         tag: `td`,
         class: `padded grey-border`,
+        children: value.type === `dir` ?
+          [getButtonConfig(`folder`, {
+            height: `20px`,
+            width: `20px`,
+            onclick: () => fillDataTable(value.path) && setDirectory(value.path)
+          })] : { }
+      },
+      {
+        tag: `td`,
+        class: `padded grey-border`,
         children: [
-          value.type === `dir` ?
-            getButtonConfig(`folder`, {
-              height: `12px`,
-              width: `12px`,
-              onclick: () => fillDataTable(value.path) && setDirectory(value.path)
-            })
-          : {},
           {
             tag: `a`,
             href: value.type === `dir` ? value.html_url : value.download_url,
