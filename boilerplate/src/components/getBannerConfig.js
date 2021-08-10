@@ -13,7 +13,7 @@ module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
       class: `row`,
       children: [
         {}, // spacer
-        svg(`close`, { id: `banner-close-svg`, height: 24, width: 24, fill: `#BBB`, onclick: () => toggleHiddenElement(id) })
+        svg(`close`, { id: `banner-close-svg`, height: `20px`, width: `20px`, fill: `#BBB`, onclick: () => toggleHiddenElement(id) })
       ]
     },
     {

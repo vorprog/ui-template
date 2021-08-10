@@ -9,7 +9,7 @@ module.exports = (columnName) => ({
   id: `${columnName}-header`,
   children: [
     {
-      class: `resizable`,
+      class: `padded resizable`,
       textContent: `${columnName}`,
       children: [
         button(`sort`)
