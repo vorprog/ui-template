@@ -26,7 +26,7 @@ const fillDataTable = async (path = ``) => {
   });
 
   const parentPath = path.substr(0, path.lastIndexOf(`/`) || path.length - 1);
-  if (path && path != ``) util.newElement(dataTable, );
+  if (path && path != ``) util.newElement(dataTable, parentDirectoryRowConfig(parentPath));
 
   const contentsReponse = await requestContentsTask;
   if (contentsReponse.status !== 200) throw new Error(`Github returned status code ${contentsReponse.status} ${await contentsReponse.text()}`);
@@ -36,7 +36,7 @@ const fillDataTable = async (path = ``) => {
   generateRows(dataTable, contents);
 };
 
-const parentDirectoryRowConfig = () => ({
+const parentDirectoryRowConfig = (path) => ({
   tag: `tr`,
   children: [
     {
@@ -46,7 +46,7 @@ const parentDirectoryRowConfig = () => ({
         getButtonConfig(`folder`, {
           height: `20px`,
           width: `20px`,
-          onclick: () => fillDataTable(parentPath) && setDirectory(parentPath)
+          onclick: () => fillDataTable(path) && setDirectory(path)
         })
       ]
     },
