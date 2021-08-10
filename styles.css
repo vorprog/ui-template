@@ -63,6 +63,7 @@ table {
 
 .resizable {
   resize: horizontal;
+  min-width: max-content;
 }
 
 *::-webkit-resizer {
