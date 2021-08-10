@@ -243,8 +243,8 @@ const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgCo
  * @returns {import('../utilities/newElement').ElementConfig}
  */
 module.exports = (symbolName, customConfig = {}) => svg(symbolName, Object.assign({
-  width: 24,
-  height: 24,
+  width: `24px`,
+  height: `24px`,
   class: `clickable padded curved grey-border`
 }, customConfig))
 
@@ -514,8 +514,8 @@ const getActionButtonsConfig = __webpack_require__(/*! ./getActionsbuttonsConfig
   xmlns: `http://www.w3.org/2000/svg`,
   tag: `svg`,
   id: `${symbolName}-svg`,
-  width: `40`,
-  height: `40`,
+  width: `40px`,
+  height: `40px`,
   class: `padded`,
   viewBox: `0 0 24 24`,
   children: [{
