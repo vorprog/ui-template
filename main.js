@@ -18,16 +18,36 @@ const setDirectory = (path) => updateQueryString(`directory`, path);
 
 const fillDataTable = async (path = ``) => {
   const requestContentsTask = makeGithubContentsRequest(path);
+  const requestStatusBanner = document.getElementById(`request-status-banner`);
+  const requestStatusBannerMessage = document.getElementById(`request-status-banner-message`);
+  requestStatusBanner.classList.remove(`hidden`);
+  requestStatusBannerMessage.textContent = `Fetching ${path} . . .`;
+  requestStatusBanner.style.backgroundColor = `grey`;
 
-  // TODO: show number of results and number selected
-  const dataTable = document.getElementById(`data-table`);
-  util.clearElement(dataTable);
 
-  util.newElement(dataTable, {
+  const dataTableHead = document.getElementById(`data-table-head`);
+  const dataTableBody = document.getElementById(`data-table-body`);
+  util.clearElement(dataTableHead);
+  util.clearElement(dataTableBody);
+
+  const contentsResponse = await requestContentsTask;
+  if (contentsResponse.status !== 200) {
+    requestStatusBannerMessage.textContent = `Github returned status code ${contentsResponse.status} ${await contentsResponse.text()}`;
+    requestStatusBanner.style.backgroundColor = `red`;
+    return;
+  }
+
+  /** @type {Array<import('./makeGithubContentsRequest').GithubResponse>} */
+  const contents = await contentsResponse.json()
+  requestStatusBannerMessage.textContent = `${contents.length} results returned!`;
+  requestStatusBanner.style.backgroundColor = `green`;
+
+
+  util.newElement(dataTableHead, {
     tag: `tr`,
     class: `grey-444`,
     children: [
-      { tag: `td`},
+      { tag: `th` },
       columnHeader(`name`),
       columnHeader(`type`),
       columnHeader(`download link`)
@@ -35,14 +55,8 @@ const fillDataTable = async (path = ``) => {
   });
 
   const parentPath = path.substr(0, path.lastIndexOf(`/`) || path.length - 1);
-  if (path && path != ``) util.newElement(dataTable, parentDirectoryRowConfig(parentPath));
-
-  const contentsReponse = await requestContentsTask;
-  if (contentsReponse.status !== 200) throw new Error(`Github returned status code ${contentsReponse.status} ${await contentsReponse.text()}`);
-
-  /** @type {Array<import('./makeGithubContentsRequest').GithubResponse>} */
-  const contents = await contentsReponse.json();
-  generateRows(dataTable, contents);
+  if (path && path != ``) util.newElement(dataTableBody, parentDirectoryRowConfig(parentPath));
+  generateRows(dataTableBody, contents);
 };
 
 /**
@@ -50,7 +64,7 @@ const fillDataTable = async (path = ``) => {
  */
 const toggleRowSelection = (tableCellElement) => {
   const parentTableRowClasses = tableCellElement.parentElement.classList;
-  if(parentTableRowClasses.contains(`blue-35a`)) parentTableRowClasses.remove(`blue-35a`)
+  if (parentTableRowClasses.contains(`blue-35a`)) parentTableRowClasses.remove(`blue-35a`)
   else parentTableRowClasses.add(`blue-35a`);
 }
 
@@ -105,7 +119,7 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
             height: `20px`,
             width: `20px`,
             onclick: () => fillDataTable(value.path) && setDirectory(value.path)
-          })] : { }
+          })] : {}
       },
       {
         tag: `td`,
@@ -168,27 +182,13 @@ module.exports = async (path = ``) => fetch(`${rootFolderUrl}/${path}`);
 
 /***/ }),
 
-/***/ "./src/actions/toggleHiddenElement.js":
-/*!********************************************!*\
-  !*** ./src/actions/toggleHiddenElement.js ***!
-  \********************************************/
-/***/ ((module) => {
-
-module.exports = (elementId) => {
-  const targetElement = document.getElementById(elementId);
-  targetElement.classList.contains(`hidden`) ?
-    targetElement.classList.remove(`hidden`) : targetElement.classList.add(`hidden`);
-};
-
-
-/***/ }),
-
 /***/ "./src/components/getActionsbuttonsConfig.js":
 /*!***************************************************!*\
   !*** ./src/components/getActionsbuttonsConfig.js ***!
   \***************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+const fillDataTable = __webpack_require__(/*! ../actions/fillDataTable */ "./src/actions/fillDataTable.js");
 const button = __webpack_require__(/*! ./getButtonConfig */ "./src/components/getButtonConfig.js");
 
 /** 
@@ -198,7 +198,10 @@ const button = __webpack_require__(/*! ./getButtonConfig */ "./src/components/ge
 module.exports = (customConfig = {}) => Object.assign({
   id: `action-buttons`,
   children: [
-    button(`refresh`),
+    button(`refresh`, { onclick: () => {
+      const targetDirectory = new URLSearchParams(location.search).get(`directory`) || ``;
+      fillDataTable(targetDirectory);
+    }}),
     button(`add`),
     button(`remove`),
     button(`sort-down`)
@@ -213,7 +216,6 @@ module.exports = (customConfig = {}) => Object.assign({
   \*******************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenElement */ "./src/actions/toggleHiddenElement.js");
 const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgConfig.js");
 
 /** 
@@ -228,10 +230,11 @@ module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
       class: `row`,
       children: [
         {}, // spacer
-        svg(`close`, { id: `banner-close-svg`, height: `20px`, width: `20px`, fill: `#BBB`, onclick: () => toggleHiddenElement(id) })
+        svg(`close`, { height: `20px`, width: `20px`, fill: `#BBB`, onclick: () => document.getElementById(id).classList.toggle(`hidden`) })
       ]
     },
     {
+      id: `${id}-message`,
       class: `padded row`,
       textContent: bannerMessage
     }
@@ -275,7 +278,7 @@ const button = __webpack_require__(/*! ./getButtonConfig */ "./src/components/ge
  * @returns {import('../utilities/newElement').ElementConfig}
  */
 module.exports = (columnName) => ({
-  tag: `td`,
+  tag: `th`,
   id: `${columnName}-header`,
   children: [
     {
@@ -326,7 +329,6 @@ module.exports = (customConfig = {}) => Object.assign({
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgConfig.js");
-const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenElement */ "./src/actions/toggleHiddenElement.js");
 
 /** 
  * @param {import('../utilities/newElement').ElementConfig} customConfig
@@ -340,11 +342,11 @@ const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenEleme
     children: [
       {
         id: `menu-button`,
-        onclick: () => (toggleHiddenElement(`menu`)),
+        onclick: () => document.getElementById(`menu`).classList.toggle(`hidden`),
         children: [svg(`menu`)]
       },
       {
-        onclick: () => (toggleHiddenElement(`search`)),
+        onclick: () => document.getElementById(`search`).classList.toggle(`hidden`),
         children: [svg(`search`)]
       }
     ]
@@ -353,11 +355,11 @@ const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenEleme
     id: `right-header`,
     children: [
       {
-        onclick: () => (toggleHiddenElement(`notifications`)),
+        onclick: () => document.getElementById(`notifications`).classList.toggle(`hidden`),
         children: [svg(`notifications`)]
       },
       {
-        onclick: () => (toggleHiddenElement(`settings`)),
+        onclick: () => document.getElementById(`settings`).classList.toggle(`hidden`),
         children: [svg(`settings`)]
       }
     ]
@@ -395,6 +397,7 @@ const toggleHiddenElement = __webpack_require__(/*! ../actions/toggleHiddenEleme
 
 const input = __webpack_require__(/*! ./getInputConfig */ "./src/components/getInputConfig.js");
 const getActionButtonsConfig = __webpack_require__(/*! ./getActionsbuttonsConfig */ "./src/components/getActionsbuttonsConfig.js");
+const getBannerConfig = __webpack_require__(/*! ./getBannerConfig */ "./src/components/getBannerConfig.js");
 
 /** 
  * @param {import('../utilities/newElement').ElementConfig} customConfig
@@ -410,11 +413,24 @@ const getActionButtonsConfig = __webpack_require__(/*! ./getActionsbuttonsConfig
       input({ id: `filter-input` }), 
       getActionButtonsConfig()
     ]
-  }, {
+  },
+  getBannerConfig(`Loading . . .`, `request-status-banner`),
+  {
     tag: `table`,
     id: `data-table`,
-    class: `grey-222 row`
-  }]
+    class: `grey-222 row`,
+    children: [
+      {
+        tag: `thead`,
+        id: `data-table-head`
+      },
+      {
+        tag: `tbody`,
+        id: `data-table-body`
+      }
+    ]
+  }
+]
 }, customConfig);
 
 

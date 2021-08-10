@@ -1,4 +1,3 @@
-const toggleHiddenElement = require('../actions/toggleHiddenElement');
 const svg = require('./getSvgConfig');
 
 /** 
@@ -13,10 +12,11 @@ module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
       class: `row`,
       children: [
         {}, // spacer
-        svg(`close`, { id: `banner-close-svg`, height: `20px`, width: `20px`, fill: `#BBB`, onclick: () => toggleHiddenElement(id) })
+        svg(`close`, { height: `20px`, width: `20px`, fill: `#BBB`, onclick: () => document.getElementById(id).classList.toggle(`hidden`) })
       ]
     },
     {
+      id: `${id}-message`,
       class: `padded row`,
       textContent: bannerMessage
     }

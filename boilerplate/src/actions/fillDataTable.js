@@ -9,16 +9,36 @@ const setDirectory = (path) => updateQueryString(`directory`, path);
 
 const fillDataTable = async (path = ``) => {
   const requestContentsTask = makeGithubContentsRequest(path);
+  const requestStatusBanner = document.getElementById(`request-status-banner`);
+  const requestStatusBannerMessage = document.getElementById(`request-status-banner-message`);
+  requestStatusBanner.classList.remove(`hidden`);
+  requestStatusBannerMessage.textContent = `Fetching ${path} . . .`;
+  requestStatusBanner.style.backgroundColor = `grey`;
 
-  // TODO: show number of results and number selected
-  const dataTable = document.getElementById(`data-table`);
-  util.clearElement(dataTable);
 
-  util.newElement(dataTable, {
+  const dataTableHead = document.getElementById(`data-table-head`);
+  const dataTableBody = document.getElementById(`data-table-body`);
+  util.clearElement(dataTableHead);
+  util.clearElement(dataTableBody);
+
+  const contentsResponse = await requestContentsTask;
+  if (contentsResponse.status !== 200) {
+    requestStatusBannerMessage.textContent = `Github returned status code ${contentsResponse.status} ${await contentsResponse.text()}`;
+    requestStatusBanner.style.backgroundColor = `red`;
+    return;
+  }
+
+  /** @type {Array<import('./makeGithubContentsRequest').GithubResponse>} */
+  const contents = await contentsResponse.json()
+  requestStatusBannerMessage.textContent = `${contents.length} results returned!`;
+  requestStatusBanner.style.backgroundColor = `green`;
+
+
+  util.newElement(dataTableHead, {
     tag: `tr`,
     class: `grey-444`,
     children: [
-      { tag: `td`},
+      { tag: `th` },
       columnHeader(`name`),
       columnHeader(`type`),
       columnHeader(`download link`)
@@ -26,14 +46,8 @@ const fillDataTable = async (path = ``) => {
   });
 
   const parentPath = path.substr(0, path.lastIndexOf(`/`) || path.length - 1);
-  if (path && path != ``) util.newElement(dataTable, parentDirectoryRowConfig(parentPath));
-
-  const contentsReponse = await requestContentsTask;
-  if (contentsReponse.status !== 200) throw new Error(`Github returned status code ${contentsReponse.status} ${await contentsReponse.text()}`);
-
-  /** @type {Array<import('./makeGithubContentsRequest').GithubResponse>} */
-  const contents = await contentsReponse.json();
-  generateRows(dataTable, contents);
+  if (path && path != ``) util.newElement(dataTableBody, parentDirectoryRowConfig(parentPath));
+  generateRows(dataTableBody, contents);
 };
 
 /**
@@ -41,7 +55,7 @@ const fillDataTable = async (path = ``) => {
  */
 const toggleRowSelection = (tableCellElement) => {
   const parentTableRowClasses = tableCellElement.parentElement.classList;
-  if(parentTableRowClasses.contains(`blue-35a`)) parentTableRowClasses.remove(`blue-35a`)
+  if (parentTableRowClasses.contains(`blue-35a`)) parentTableRowClasses.remove(`blue-35a`)
   else parentTableRowClasses.add(`blue-35a`);
 }
 
@@ -96,7 +110,7 @@ const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @
             height: `20px`,
             width: `20px`,
             onclick: () => fillDataTable(value.path) && setDirectory(value.path)
-          })] : { }
+          })] : {}
       },
       {
         tag: `td`,

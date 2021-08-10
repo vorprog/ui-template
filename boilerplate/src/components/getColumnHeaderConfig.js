@@ -5,7 +5,7 @@ const button = require('./getButtonConfig');
  * @returns {import('../utilities/newElement').ElementConfig}
  */
 module.exports = (columnName) => ({
-  tag: `td`,
+  tag: `th`,
   id: `${columnName}-header`,
   children: [
     {

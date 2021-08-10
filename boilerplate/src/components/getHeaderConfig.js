@@ -1,5 +1,4 @@
 const svg = require('./getSvgConfig');
-const toggleHiddenElement = require('../actions/toggleHiddenElement');
 
 /** 
  * @param {import('../utilities/newElement').ElementConfig} customConfig
@@ -13,11 +12,11 @@ const toggleHiddenElement = require('../actions/toggleHiddenElement');
     children: [
       {
         id: `menu-button`,
-        onclick: () => (toggleHiddenElement(`menu`)),
+        onclick: () => document.getElementById(`menu`).classList.toggle(`hidden`),
         children: [svg(`menu`)]
       },
       {
-        onclick: () => (toggleHiddenElement(`search`)),
+        onclick: () => document.getElementById(`search`).classList.toggle(`hidden`),
         children: [svg(`search`)]
       }
     ]
@@ -26,11 +25,11 @@ const toggleHiddenElement = require('../actions/toggleHiddenElement');
     id: `right-header`,
     children: [
       {
-        onclick: () => (toggleHiddenElement(`notifications`)),
+        onclick: () => document.getElementById(`notifications`).classList.toggle(`hidden`),
         children: [svg(`notifications`)]
       },
       {
-        onclick: () => (toggleHiddenElement(`settings`)),
+        onclick: () => document.getElementById(`settings`).classList.toggle(`hidden`),
         children: [svg(`settings`)]
       }
     ]
