@@ -10,6 +10,7 @@ const settings = require('./components/getSettingsConfig');
 const mainRow = require('./components/getMainRowConfig');
 const footer = require('./components/getFooterConfig');
 const fillDataTable = require('./actions/fillDataTable');
+const updateQueryString = require('./utilities/updateQueryString');
 
 const startup = async () => {
   console.log(`Document intialized.`);
@@ -28,8 +29,11 @@ const startup = async () => {
 
   document.getElementById(`filter-input`).focus();
 
+  document.addEventListener(`LOAD_DATA`, fillDataTable);
+  document.addEventListener(`LOAD_DATA`, (event) => updateQueryString(`directory`, event.detail));
   const targetDirectory = new URLSearchParams(location.search).get(`directory`) || ``;
-  await fillDataTable(targetDirectory);
+  const event = new CustomEvent(`LOAD_DATA`, { detail: targetDirectory });
+  document.dispatchEvent(event);
 };
 
 (async () => {

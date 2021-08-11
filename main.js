@@ -11,12 +11,14 @@ const columnHeader = __webpack_require__(/*! ../components/getColumnHeaderConfig
 const util = __webpack_require__(/*! ../utilities/all */ "./src/utilities/all.js");
 const makeGithubContentsRequest = __webpack_require__(/*! ./makeGithubContentsRequest */ "./src/actions/makeGithubContentsRequest.js");
 const getButtonConfig = __webpack_require__(/*! ../components/getButtonConfig */ "./src/components/getButtonConfig.js");
-const updateQueryString = __webpack_require__(/*! ../utilities/updateQueryString */ "./src/utilities/updateQueryString.js");
+const getRowDataConfig = __webpack_require__(/*! ../components/getDataRowConfig */ "./src/components/getDataRowConfig.js");
 
-const githubPagesDomain = `${window.env.GITHUB_USERNAME}.github.io`;
-const setDirectory = (path) => updateQueryString(`directory`, path);
-
-const fillDataTable = async (path = ``) => {
+/**
+ * @param {CustomEvent} loadDataEvent 
+ * @returns {void}
+ */
+const fillDataTable = async (loadDataEvent) => {
+  const path = loadDataEvent.detail || ``;
   const requestContentsTask = makeGithubContentsRequest(path);
   const requestStatusBanner = document.getElementById(`request-status-banner`);
   const requestStatusBannerMessage = document.getElementById(`request-status-banner-message`);
@@ -50,78 +52,24 @@ const fillDataTable = async (path = ``) => {
         class: `padded`,
         children: [
           getButtonConfig(`back`, {
-            onclick: () => fillDataTable(parentPath) && setDirectory(parentPath)
+            onclick: () => {
+              const event = new CustomEvent(`LOAD_DATA`, { detail: parentPath });
+              document.dispatchEvent(event)
+            }
           })
         ]
       },
       columnHeader(`name`),
       columnHeader(`type`),
-      columnHeader(`download link`)
+      columnHeader(`size`),
+      columnHeader(`sha`),
     ]
   });
 
-  generateRows(dataTableBody, contents);
+  util.loop(contents, (key, value) => 
+    util.newElement(dataTableBody, getRowDataConfig(`data-row-${key}`, value))
+  );
 };
-
-/**
- * @param {HTMLElement} tableCellElement
- */
-const toggleRowSelection = (tableCellElement) => {
-  const parentTableRowClasses = tableCellElement.parentElement.classList;
-  if (parentTableRowClasses.contains(`blue-35a`)) parentTableRowClasses.remove(`blue-35a`)
-  else parentTableRowClasses.add(`blue-35a`);
-}
-
-/**
- * @param {HTMLElement} tableElement 
- * @param {Array<import('./makeGithubContentsRequest').GithubResponse>} contents
- * @returns {Array<HTMLElement>}
- */
-const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @type {import('./makeGithubContentsRequest').GithubResponse} */ value) =>
-  util.newElement(tableElement, {
-    tag: `tr`,
-    onclick: (event) => toggleRowSelection(event.target),
-    id: `data-${key}`,
-    children: [
-      {
-        tag: `td`,
-        class: `padded grey-border`,
-        children: value.type === `dir` ?
-          [getButtonConfig(`folder`, {
-            height: `20px`,
-            width: `20px`,
-            onclick: () => fillDataTable(value.path) && setDirectory(value.path)
-          })] : {}
-      },
-      {
-        tag: `td`,
-        class: `padded grey-border`,
-        children: [
-          {
-            tag: `a`,
-            href: value.type === `dir` ? value.html_url : value.download_url,
-            target: `_blank`,
-            textContent: value.name
-          }
-        ]
-      },
-      {
-        tag: `td`,
-        class: `padded grey-border`,
-        textContent: value.type
-      },
-      {
-        tag: `td`,
-        class: `padded grey-border`,
-        children: [{
-          tag: `a`,
-          href: `https://${githubPagesDomain}/${value.path}`,
-          target: `_blank`,
-          textContent: `${githubPagesDomain}/${value.path}`
-        }]
-      }
-    ]
-  }));
 
 module.exports = fillDataTable;
 
@@ -138,8 +86,10 @@ const rootFolderUrl = `https://api.github.com/repos/${window.env.GITHUB_USERNAME
 
 /**
  * @typedef {Object} GithubResponse
- * @property {('dir'|'file'|'symlink')} type
  * @property {string} path
+ * @property {('dir'|'file'|'symlink')} type
+ * @property {number} size
+ * @property {sting} sha
  * @property {string} download_url
  * @property {sting} html_url
  */
@@ -160,7 +110,6 @@ module.exports = async (path = ``) => fetch(`${rootFolderUrl}/${path}`);
   \***************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const fillDataTable = __webpack_require__(/*! ../actions/fillDataTable */ "./src/actions/fillDataTable.js");
 const button = __webpack_require__(/*! ./getButtonConfig */ "./src/components/getButtonConfig.js");
 
 /** 
@@ -170,10 +119,13 @@ const button = __webpack_require__(/*! ./getButtonConfig */ "./src/components/ge
 module.exports = (customConfig = {}) => Object.assign({
   id: `action-buttons`,
   children: [
-    button(`refresh`, { onclick: () => {
-      const targetDirectory = new URLSearchParams(location.search).get(`directory`) || ``;
-      fillDataTable(targetDirectory);
-    }}),
+    button(`refresh`, {
+      onclick: () => {
+        const targetDirectory = new URLSearchParams(location.search).get(`directory`) || ``;
+        const event = new CustomEvent(`LOAD_DATA`, { detail: targetDirectory });
+        document.dispatchEvent(event)
+      }
+    }),
     button(`add`),
     button(`remove`),
     button(`sort-down`)
@@ -266,6 +218,80 @@ module.exports = (columnName) => ({
 
 /***/ }),
 
+/***/ "./src/components/getDataRowConfig.js":
+/*!********************************************!*\
+  !*** ./src/components/getDataRowConfig.js ***!
+  \********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const getButtonConfig = __webpack_require__(/*! ./getButtonConfig */ "./src/components/getButtonConfig.js");
+
+/**
+ * @param {string} id
+ * @param {import('../actions/makeGithubContentsRequest').GithubResponse} data
+ * @returns {import('../utilities/newElement').ElementConfig}
+ */
+module.exports = (id, data) => Object.assign({
+  tag: `tr`,
+  onclick: (event) => event.target.parentElement.classList.toggle(`blue-35a`), // event.target is cell element, use parent to highlight entire row
+  id: id,
+  children: [
+    {
+      tag: `td`,
+      class: `padded grey-border`,
+      children: [ data.type === `dir` ?
+        getButtonConfig(`folder`, {
+          height: `20px`,
+          width: `20px`,
+          onclick: () => {
+            const event = new CustomEvent(`LOAD_DATA`, { detail: data.path });
+            document.dispatchEvent(event)
+          }
+        }) :
+        getButtonConfig(`view`, {
+          height: `20px`,
+          width: `20px`,
+          href: data.path
+        })
+      ]
+    },
+    {
+      tag: `td`,
+      class: `padded grey-border`,
+      children: [
+        {
+          tag: `a`,
+          href: data.type === `dir` ? data.html_url : data.download_url,
+          target: `_blank`,
+          textContent: data.name
+        }
+      ]
+    },
+    {
+      tag: `td`,
+      class: `padded grey-border`,
+      textContent: data.type
+    },
+    {
+      tag: `td`,
+      class: `padded grey-border`,
+      children: [{
+        textContent: `${data.size}`
+      }]
+    },
+    {
+      tag: `td`,
+      class: `padded grey-border`,
+      children: [{
+        textContent: data.sha
+      }]
+    }
+  ]
+});
+
+
+/***/ }),
+
 /***/ "./src/components/getFooterConfig.js":
 /*!*******************************************!*\
   !*** ./src/components/getFooterConfig.js ***!
@@ -301,8 +327,6 @@ module.exports = (customConfig = {}) => Object.assign({
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const svg = __webpack_require__(/*! ./getSvgConfig */ "./src/components/getSvgConfig.js");
-const fillDataTable = __webpack_require__(/*! ../actions/fillDataTable */ "./src/actions/fillDataTable.js");
-const updateQueryString = __webpack_require__(/*! ../utilities/updateQueryString */ "./src/utilities/updateQueryString.js");
 
 /** 
  * @param {import('../utilities/newElement').ElementConfig} customConfig
@@ -316,7 +340,10 @@ const updateQueryString = __webpack_require__(/*! ../utilities/updateQueryString
     children: [
       {
         id: `home-button`,
-        onclick: () => fillDataTable() &&  updateQueryString(`directory`, ``),
+        onclick: () => {
+          const event = new CustomEvent(`LOAD_DATA`, { detail: `` });
+          document.dispatchEvent(event)
+        },
         children: [svg(`home`)]
       },
       {
@@ -836,6 +863,7 @@ const settings = __webpack_require__(/*! ./components/getSettingsConfig */ "./sr
 const mainRow = __webpack_require__(/*! ./components/getMainRowConfig */ "./src/components/getMainRowConfig.js");
 const footer = __webpack_require__(/*! ./components/getFooterConfig */ "./src/components/getFooterConfig.js");
 const fillDataTable = __webpack_require__(/*! ./actions/fillDataTable */ "./src/actions/fillDataTable.js");
+const updateQueryString = __webpack_require__(/*! ./utilities/updateQueryString */ "./src/utilities/updateQueryString.js");
 
 const startup = async () => {
   console.log(`Document intialized.`);
@@ -854,8 +882,11 @@ const startup = async () => {
 
   document.getElementById(`filter-input`).focus();
 
+  document.addEventListener(`LOAD_DATA`, fillDataTable);
+  document.addEventListener(`LOAD_DATA`, (event) => updateQueryString(`directory`, event.detail));
   const targetDirectory = new URLSearchParams(location.search).get(`directory`) || ``;
-  await fillDataTable(targetDirectory);
+  const event = new CustomEvent(`LOAD_DATA`, { detail: targetDirectory });
+  document.dispatchEvent(event);
 };
 
 (async () => {

@@ -1,6 +1,4 @@
 const svg = require('./getSvgConfig');
-const fillDataTable = require('../actions/fillDataTable');
-const updateQueryString = require('../utilities/updateQueryString');
 
 /** 
  * @param {import('../utilities/newElement').ElementConfig} customConfig
@@ -14,7 +12,10 @@ const updateQueryString = require('../utilities/updateQueryString');
     children: [
       {
         id: `home-button`,
-        onclick: () => fillDataTable() &&  updateQueryString(`directory`, ``),
+        onclick: () => {
+          const event = new CustomEvent(`LOAD_DATA`, { detail: `` });
+          document.dispatchEvent(event)
+        },
         children: [svg(`home`)]
       },
       {

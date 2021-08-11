@@ -2,12 +2,14 @@ const columnHeader = require('../components/getColumnHeaderConfig');
 const util = require('../utilities/all');
 const makeGithubContentsRequest = require('./makeGithubContentsRequest');
 const getButtonConfig = require('../components/getButtonConfig');
-const updateQueryString = require('../utilities/updateQueryString');
+const getRowDataConfig = require('../components/getDataRowConfig');
 
-const githubPagesDomain = `${window.env.GITHUB_USERNAME}.github.io`;
-const setDirectory = (path) => updateQueryString(`directory`, path);
-
-const fillDataTable = async (path = ``) => {
+/**
+ * @param {CustomEvent} loadDataEvent 
+ * @returns {void}
+ */
+const fillDataTable = async (loadDataEvent) => {
+  const path = loadDataEvent.detail || ``;
   const requestContentsTask = makeGithubContentsRequest(path);
   const requestStatusBanner = document.getElementById(`request-status-banner`);
   const requestStatusBannerMessage = document.getElementById(`request-status-banner-message`);
@@ -41,77 +43,23 @@ const fillDataTable = async (path = ``) => {
         class: `padded`,
         children: [
           getButtonConfig(`back`, {
-            onclick: () => fillDataTable(parentPath) && setDirectory(parentPath)
+            onclick: () => {
+              const event = new CustomEvent(`LOAD_DATA`, { detail: parentPath });
+              document.dispatchEvent(event)
+            }
           })
         ]
       },
       columnHeader(`name`),
       columnHeader(`type`),
-      columnHeader(`download link`)
+      columnHeader(`size`),
+      columnHeader(`sha`),
     ]
   });
 
-  generateRows(dataTableBody, contents);
+  util.loop(contents, (key, value) => 
+    util.newElement(dataTableBody, getRowDataConfig(`data-row-${key}`, value))
+  );
 };
-
-/**
- * @param {HTMLElement} tableCellElement
- */
-const toggleRowSelection = (tableCellElement) => {
-  const parentTableRowClasses = tableCellElement.parentElement.classList;
-  if (parentTableRowClasses.contains(`blue-35a`)) parentTableRowClasses.remove(`blue-35a`)
-  else parentTableRowClasses.add(`blue-35a`);
-}
-
-/**
- * @param {HTMLElement} tableElement 
- * @param {Array<import('./makeGithubContentsRequest').GithubResponse>} contents
- * @returns {Array<HTMLElement>}
- */
-const generateRows = (tableElement, contents) => util.loop(contents, (key, /** @type {import('./makeGithubContentsRequest').GithubResponse} */ value) =>
-  util.newElement(tableElement, {
-    tag: `tr`,
-    onclick: (event) => toggleRowSelection(event.target),
-    id: `data-${key}`,
-    children: [
-      {
-        tag: `td`,
-        class: `padded grey-border`,
-        children: value.type === `dir` ?
-          [getButtonConfig(`folder`, {
-            height: `20px`,
-            width: `20px`,
-            onclick: () => fillDataTable(value.path) && setDirectory(value.path)
-          })] : {}
-      },
-      {
-        tag: `td`,
-        class: `padded grey-border`,
-        children: [
-          {
-            tag: `a`,
-            href: value.type === `dir` ? value.html_url : value.download_url,
-            target: `_blank`,
-            textContent: value.name
-          }
-        ]
-      },
-      {
-        tag: `td`,
-        class: `padded grey-border`,
-        textContent: value.type
-      },
-      {
-        tag: `td`,
-        class: `padded grey-border`,
-        children: [{
-          tag: `a`,
-          href: `https://${githubPagesDomain}/${value.path}`,
-          target: `_blank`,
-          textContent: `${githubPagesDomain}/${value.path}`
-        }]
-      }
-    ]
-  }));
 
 module.exports = fillDataTable;
