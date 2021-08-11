@@ -22,6 +22,7 @@ table {
   border-collapse: collapse;
   display: block;
   white-space: nowrap;
+  min-height: 100px;
 }
 
 .input {
