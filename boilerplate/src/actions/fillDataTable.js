@@ -15,7 +15,6 @@ const fillDataTable = async (path = ``) => {
   requestStatusBannerMessage.textContent = `Fetching ${path} . . .`;
   requestStatusBanner.style.backgroundColor = `grey`;
 
-
   const dataTableHead = document.getElementById(`data-table-head`);
   const dataTableBody = document.getElementById(`data-table-body`);
   util.clearElement(dataTableHead);
@@ -33,19 +32,25 @@ const fillDataTable = async (path = ``) => {
   requestStatusBannerMessage.textContent = `${contents.length} results returned!`;
   requestStatusBanner.style.backgroundColor = `green`;
 
-
+  const parentPath = path.substr(0, path.lastIndexOf(`/`) || path.length - 1);
   util.newElement(dataTableHead, {
     tag: `tr`,
     children: [
-      { tag: `th` },
+      {
+        tag: `th`,
+        class: `padded`,
+        children: [
+          getButtonConfig(`back`, {
+            onclick: () => fillDataTable(parentPath) && setDirectory(parentPath)
+          })
+        ]
+      },
       columnHeader(`name`),
       columnHeader(`type`),
       columnHeader(`download link`)
     ]
   });
 
-  const parentPath = path.substr(0, path.lastIndexOf(`/`) || path.length - 1);
-  if (path && path != ``) util.newElement(dataTableBody, parentDirectoryRowConfig(parentPath));
   generateRows(dataTableBody, contents);
 };
 
@@ -57,38 +62,6 @@ const toggleRowSelection = (tableCellElement) => {
   if (parentTableRowClasses.contains(`blue-35a`)) parentTableRowClasses.remove(`blue-35a`)
   else parentTableRowClasses.add(`blue-35a`);
 }
-
-const parentDirectoryRowConfig = (path) => ({
-  tag: `tr`,
-  onclick: (event) => toggleRowSelection(event.target),
-  children: [
-    {
-      tag: `td`,
-      class: `padded grey-border`,
-      children: [
-        getButtonConfig(`folder`, {
-          height: `20px`,
-          width: `20px`,
-          onclick: () => fillDataTable(path) && setDirectory(path)
-        })
-      ]
-    },
-    {
-      tag: `td`,
-      class: `padded grey-border`,
-      children: [{ tag: `a`, textContent: `../` }]
-    },
-    {
-      tag: `td`,
-      class: `padded grey-border`,
-      textContent: `dir`
-    },
-    {
-      tag: `td`,
-      class: `padded grey-border`,
-    }
-  ]
-});
 
 /**
  * @param {HTMLElement} tableElement 

@@ -1,4 +1,6 @@
 const svg = require('./getSvgConfig');
+const fillDataTable = require('../actions/fillDataTable');
+const updateQueryString = require('../utilities/updateQueryString');
 
 /** 
  * @param {import('../utilities/newElement').ElementConfig} customConfig
@@ -10,6 +12,11 @@ const svg = require('./getSvgConfig');
   children: [{
     id: `left-header`,
     children: [
+      {
+        id: `home-button`,
+        onclick: () => fillDataTable() &&  updateQueryString(`directory`, ``),
+        children: [svg(`home`)]
+      },
       {
         id: `menu-button`,
         onclick: () => document.getElementById(`menu`).classList.toggle(`hidden`),
