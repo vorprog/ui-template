@@ -21,14 +21,16 @@ const getBannerConfig = require('./getBannerConfig');
   {
     tag: `table`,
     id: `data-table`,
-    class: `grey-222 row`,
+    class: `row`,
     children: [
       {
         tag: `thead`,
+        class: `grey-444`,
         id: `data-table-head`
       },
       {
         tag: `tbody`,
+        class: `grey-222`,
         id: `data-table-body`
       }
     ]

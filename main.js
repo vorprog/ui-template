@@ -45,7 +45,6 @@ const fillDataTable = async (path = ``) => {
 
   util.newElement(dataTableHead, {
     tag: `tr`,
-    class: `grey-444`,
     children: [
       { tag: `th` },
       columnHeader(`name`),
@@ -418,14 +417,16 @@ const getBannerConfig = __webpack_require__(/*! ./getBannerConfig */ "./src/comp
   {
     tag: `table`,
     id: `data-table`,
-    class: `grey-222 row`,
+    class: `row`,
     children: [
       {
         tag: `thead`,
+        class: `grey-444`,
         id: `data-table-head`
       },
       {
         tag: `tbody`,
+        class: `grey-222`,
         id: `data-table-body`
       }
     ]

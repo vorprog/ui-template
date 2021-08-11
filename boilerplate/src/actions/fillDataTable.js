@@ -36,7 +36,6 @@ const fillDataTable = async (path = ``) => {
 
   util.newElement(dataTableHead, {
     tag: `tr`,
-    class: `grey-444`,
     children: [
       { tag: `th` },
       columnHeader(`name`),
