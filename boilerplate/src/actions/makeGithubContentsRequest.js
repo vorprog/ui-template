@@ -1,4 +1,4 @@
-const userName = `richardsnider`;
+// https://docs.github.com/en/rest/reference/repos#contents
 const rootFolderUrl = `https://api.github.com/repos/${window.env.GITHUB_USERNAME}/${window.env.GITHUB_USERNAME}.github.io/contents`;
 
 /**
