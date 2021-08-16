@@ -1,9 +1,13 @@
 const filesystem = require('fs');
 const http = require('http');
 
-const username = process.env.GITHUB_USERNAME;
-const userNameIsSet = username && typeof (username) === `string`  && username.trim() !== ``;
-if(!userNameIsSet) throw new Error(`GITHUB_USERNAME environment variable is not set.`)
+const githubUsername = process.env.GITHUB_USERNAME;
+const githubUsernameIsSet = githubUsername && typeof (githubUsername) === `string`  && githubUsername.trim() !== ``;
+if(!githubUsernameIsSet) throw new Error(`GITHUB_USERNAME environment variable is not set.`);
+
+const linkedinUsername = process.env.LINKEDIN_USERNAME;
+const linkedinUsernameIsSet = linkedinUsername && typeof (linkedinUsername) === `string`  && linkedinUsername.trim() !== ``;
+if(!linkedinUsernameIsSet) throw new Error(`LINKEDIN_USERNAME environment variable is not set.`);
 
 const indexHTMLContent = `<!DOCTYPE html>
 <html lang="en">
@@ -13,7 +17,8 @@ const indexHTMLContent = `<!DOCTYPE html>
     <link rel="stylesheet" href="styles.css">
     <script>
       window.env = {};
-      window.env.GITHUB_USERNAME = "${username}";
+      window.env.GITHUB_USERNAME = "${githubUsername}";
+      window.env.LINKEDIN_USERNAME = "${linkedinUsername}";
     </script>
     <script src="./main.js"></script>
   </head>
