@@ -1,7 +1,7 @@
 {
-  "name": "boilerplate",
+  "name": "@vorprog/template-ui",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "webpack --mode=development --devtool=source-map && node server.js",
     "build": "webpack --mode=development --devtool=source-map"
