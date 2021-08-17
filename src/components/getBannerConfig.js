@@ -2,7 +2,7 @@ const svg = require('./getSvgConfig');
 
 /** 
  * @param {string} bannerMessage
- * @returns {import('../utilities/newElement').ElementConfig}
+ * @returns {import('@vorprog/elemancer').ElementConfig}
  */
 module.exports = (bannerMessage = `<banner message>`, id = `banner`) => ({
   id: id,

@@ -1,13 +1,10 @@
-const keyValuePair = require('./keyValuePair');
-const loop = require('./loop');
-const loopToObject = require('./loopToObject');
-const newElement = require('./newElement');
+const loop = require('@vorprog/loop');
+const newElement = require('@vorprog/elemancer');
 const clearElement = require('./clearElement');
 
 module.exports = {
-  keyValuePair: keyValuePair,
-  loop: loop,
-  loopToObject: loopToObject,
+  keyValuePair: loop.keyValuePair,
+  loop: loop.loop,
   newElement: newElement,
   clearElement: clearElement,
 };

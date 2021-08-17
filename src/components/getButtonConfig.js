@@ -2,7 +2,7 @@ const svg = require(`./getSvgConfig`);
 
 /**
  * @param {string} symbolName
- * @returns {import('../utilities/newElement').ElementConfig}
+ * @returns {import('@vorprog/elemancer').ElementConfig}
  */
 module.exports = (symbolName, customConfig = {}) => svg(symbolName, Object.assign({
   width: `24px`,

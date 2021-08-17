@@ -1,4 +1,4 @@
-/** @returns {import('../utilities/newElement').ElementConfig} */
+/** @returns {import('@vorprog/elemancer').ElementConfig} */
 const getSymbolConfig = (symbolName, pathDataString) => ({
   xmlns: `http://www.w3.org/2000/svg`,
   tag: `symbol`,
@@ -10,7 +10,7 @@ const getSymbolConfig = (symbolName, pathDataString) => ({
   }]
 });
 
-/** @returns {import('../utilities/newElement').ElementConfig} */
+/** @returns {import('@vorprog/elemancer').ElementConfig} */
 module.exports = () => ({
   xmlns: `http://www.w3.org/2000/svg`,
   tag: `svg`,

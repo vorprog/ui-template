@@ -1,7 +1,7 @@
 /** 
  * @param {string} symbolName
- * @param {import('../utilities/newElement').ElementConfig} customConfig
- * @returns {import('../utilities/newElement').ElementConfig}
+ * @param {import('@vorprog/elemancer').ElementConfig} customConfig
+ * @returns {import('@vorprog/elemancer').ElementConfig}
  */
  module.exports = (symbolName, customConfig = {}) => Object.assign({
   xmlns: `http://www.w3.org/2000/svg`,

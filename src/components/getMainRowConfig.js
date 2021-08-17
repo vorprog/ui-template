@@ -3,8 +3,8 @@ const getActionButtonsConfig = require('./getActionsbuttonsConfig');
 const getBannerConfig = require('./getBannerConfig');
 
 /** 
- * @param {import('../utilities/newElement').ElementConfig} customConfig
- * @returns {import('../utilities/newElement').ElementConfig}
+ * @param {import('@vorprog/elemancer').ElementConfig} customConfig
+ * @returns {import('@vorprog/elemancer').ElementConfig}
  */
  module.exports = (customConfig = {}) => Object.assign({
   id: `main-row`,

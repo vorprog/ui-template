@@ -1,5 +1,5 @@
-const loop = require('./utilities/loop');
-const newElement = require('./utilities/newElement');
+const loop = require('@vorprog/loop').loop;
+const newElement = require('@vorprog/elemancer');
 const messages = require('./data/messages');
 const svgContent = require('./components/getSvgContentConfig');
 const banner = require('./components/getBannerConfig');

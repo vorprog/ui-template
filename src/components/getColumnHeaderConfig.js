@@ -2,7 +2,7 @@ const button = require('./getButtonConfig');
 
 /**
  * @param {string} columnName
- * @returns {import('../utilities/newElement').ElementConfig}
+ * @returns {import('@vorprog/elemancer').ElementConfig}
  */
 module.exports = (columnName) => ({
   tag: `th`,

@@ -3,7 +3,7 @@ const getButtonConfig = require('./getButtonConfig');
 /**
  * @param {string} id
  * @param {import('../actions/makeGithubContentsRequest').GithubResponse} data
- * @returns {import('../utilities/newElement').ElementConfig}
+ * @returns {import('@vorprog/elemancer').ElementConfig}
  */
 module.exports = (id, data) => Object.assign({
   tag: `tr`,

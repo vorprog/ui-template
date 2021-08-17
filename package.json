@@ -7,6 +7,8 @@
     "build": "webpack --mode=development --devtool=source-map"
   },
   "dependencies": {
+    "@vorprog/elemancer": "^1.0.0",
+    "@vorprog/loop": "^1.1.1",
     "webpack": "^5.27.1"
   },
   "devDependencies": {
